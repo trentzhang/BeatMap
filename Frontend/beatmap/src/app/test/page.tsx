@@ -26,7 +26,7 @@ console.log(
   )
 );
 
-export default function test(params: Number) {
+export default function test(params: any) {
   topTracks;
   return "Hello";
 }
