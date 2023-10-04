@@ -1,1 +1,1 @@
-# Location based music sharing app
+# BeatMap - Location based music sharing app
