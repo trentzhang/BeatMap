@@ -9,13 +9,21 @@ interface Position {
   latitude: number;
   longitude: number;
 }
+
+// Define types for props
+interface MapProps {
+  mapLoaded: boolean;
+  setMapLoaded: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 const icon = L.icon({ iconUrl: "/marker-icon.png" });
 
 export const Map: React.FC = () => {
   const [position, setPosition] = useState<Position>({
-    latitude: 0,
-    longitude: 0,
+    latitude: 40.116421,
+    longitude: -88.243385,
   });
+  //   const [mapLoaded, setMapLoaded] = useState(false);
 
   useEffect(() => {
     // Get user's current location using Geolocation API
@@ -47,15 +55,16 @@ export const Map: React.FC = () => {
 
   return (
     <MapContainer
-      className="w-full aspect-video"
+      className="h-full w-full"
       center={[position.latitude, position.longitude]}
       zoom={13}
-      scrollWheelZoom={false}
+      scrollWheelZoom={true}
     >
       <UpdateMapCenter />
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution="Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ"
+        url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+        maxZoom={16}
       />
       <Marker position={[position.latitude, position.longitude]} icon={icon}>
         <Popup>
