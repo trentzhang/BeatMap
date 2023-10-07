@@ -3,6 +3,8 @@ import Map from "./Components/Map";
 import { useParams } from "next/navigation";
 import client from "./MongoDB/Connect";
 import TopSongs from "@/app/SpotifyAPIs/getTopTracks";
+import { useRouter } from "next/router";
+
 const client_id = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 const redirect_uri = process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URL;
@@ -70,18 +72,20 @@ export default async function Home({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) {
+  console.log("🌈🌈🌈", searchParams);
+  //   const router = useRouter();
   const currentSpotifyCode = searchParams?.code ?? "";
   const spotifyToken = await spotifyCode2Token(currentSpotifyCode);
   console.log("spotifyToken :>> ", spotifyToken);
   return (
     <main className="flex min-h-screen flex-col items-center justify-normal py-14">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
+      <div className="z-100 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit    lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
           Welcome to BeatMap
         </p>
 
         <div className="fixed bottom-0 left-0 flex h-12 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black  lg:bg-none">
-          <div className="pointer-events-none flex place-items-center gap-2 p-8 ">
+          <div className="pointer-events-none flex place-items-center gap-2 pb-1 ">
             By Trent Zhang
           </div>
         </div>

@@ -26,7 +26,7 @@ async function getTopTracks(spotifyToken: string) {
 
 export default async function test({ spotifyToken }: { spotifyToken: string }) {
   const topTracks = await getTopTracks(spotifyToken);
-  console.log("topTracks :>> ", topTracks);
+  //   console.log("topTracks :>> ", topTracks);
   return (
     <div className="text-5xl">
       {topTracks?.map(
