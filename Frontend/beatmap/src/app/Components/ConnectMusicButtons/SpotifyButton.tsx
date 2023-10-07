@@ -1,5 +1,7 @@
-import { useEffect } from "react";
-function stringifyParams(queryParams: any): string {
+"use client";
+// import { useEffect } from "react";
+
+export function stringifyParams(queryParams: any): string {
   const stringParams = Object.entries(queryParams)
     .map(
       ([key, value]) =>
@@ -9,40 +11,11 @@ function stringifyParams(queryParams: any): string {
 
   return stringParams;
 }
+
 function SpotifyButton(params: any) {
   const client_id = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
-  const client_secret = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET;
   const redirect_uri = process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URL;
   const scope = "user-top-read user-read-recently-played";
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get("code");
-
-    if (code) {
-      const form = {
-        code: code,
-        redirect_uri: redirect_uri,
-        grant_type: "authorization_code",
-      };
-
-      const encoded_client_info = btoa(`${client_id}:${client_secret}`);
-
-      fetch(`https://accounts.spotify.com/api/token`, {
-        method: "post",
-        headers: {
-          Authorization: `Basic ${encoded_client_info}`,
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: stringifyParams(form),
-      })
-        .then((res) => res.json())
-        .then((res) => console.log("res :>> ", res));
-
-      // Optionally, you can clear the query parameters from the URL
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
-  }, [client_id, client_secret, redirect_uri]);
 
   function handleConnect(params: any) {
     const queryParams = {

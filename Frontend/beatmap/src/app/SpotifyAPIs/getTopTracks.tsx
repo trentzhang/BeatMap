@@ -14,25 +14,25 @@ async function fetchWebApi(
   return await res.json();
 }
 
-async function getTopTracks() {
+async function getTopTracks(spotifyToken: string) {
   return (
     await fetchWebApi(
       "v1/me/top/tracks?time_range=short_term&limit=100",
       "GET",
-      process.env.MY_SPOTIFY_TEST_TOKEN
+      spotifyToken
     )
   ).items;
 }
 
-const topTracks = await getTopTracks();
-
-export default function test(params: any) {
-  console.log(
-    topTracks?.map(
-      ({ name, artists }: { name: string; artists: [{ name: string }] }) =>
-        `${name} by ${artists.map((artist) => artist.name).join(", ")}`
-    )
+export default async function test({ spotifyToken }: { spotifyToken: string }) {
+  const topTracks = await getTopTracks(spotifyToken);
+  console.log("topTracks :>> ", topTracks);
+  return (
+    <div className="text-5xl">
+      {topTracks?.map(
+        ({ name, artists }: { name: string; artists: [{ name: string }] }) =>
+          `${name} by ${artists.map((artist) => artist.name).join(", ")}`
+      )}
+    </div>
   );
-  console.log("process.env :>> ", process.env.REACT_APP_API_URL);
-  return <div className="text-5xl">Hello</div>;
 }
