@@ -5,6 +5,7 @@ import client from "./MongoDB/Connect";
 import TopSongs from "@/app/SpotifyAPIs/getTopTracks";
 import { useRouter } from "next/router";
 
+export const dynamic = "force-dynamic";
 const client_id = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 const redirect_uri = process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URL;
