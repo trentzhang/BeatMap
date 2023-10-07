@@ -62,7 +62,8 @@ async function spotifyCode2Token(currentSpotifyCode: string) {
         });
         // return access token
         return res.access_token;
-      });
+      })
+      .catch((e) => console.log("e :>> ", e));
     console.log("spotifyToken :>> ", spotifyToken);
   }
   return spotifyToken;
