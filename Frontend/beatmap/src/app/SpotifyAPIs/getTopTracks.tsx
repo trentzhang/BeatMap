@@ -17,14 +17,18 @@ async function fetchWebApi(
 async function getTopTracks(spotifyToken: string) {
   return (
     await fetchWebApi(
-      "v1/me/top/tracks?time_range=short_term&limit=100",
+      "v1/me/top/tracks?time_range=medium_term&limit=100",
       "GET",
       spotifyToken
     )
   ).items;
 }
 
-export default async function test({ spotifyToken }: { spotifyToken: string }) {
+export default async function MusicComponent({
+  spotifyToken,
+}: {
+  spotifyToken: string;
+}) {
   const topTracks = await getTopTracks(spotifyToken);
   console.log("topTracks :>> ", topTracks?.[0]);
   return (
