@@ -5,7 +5,6 @@ import client from "./MongoDB/Connect";
 import TopSongs from "@/app/SpotifyAPIs/getTopTracks";
 import { useRouter } from "next/router";
 
-// export const dynamic = "force-dynamic";
 const client_id = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 const redirect_uri = process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URL;
@@ -81,7 +80,7 @@ export default async function Home({
   console.log("spotifyToken :>> ", spotifyToken);
   return (
     <main className="flex min-h-screen flex-col items-center justify-normal py-14">
-      <div className="z-100 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
+      <div className="z-50 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit    lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
           Welcome to BeatMap
         </p>
@@ -93,11 +92,14 @@ export default async function Home({
         </div>
       </div>
 
-      <div className="h-[70vh] mt-6 w-full">
+      <div className="h-[70vh] mt-6 w-full z-0">
         <Map></Map>
       </div>
-      {spotifyToken ? "Connected to Spotify!" : <SpotifyButton></SpotifyButton>}
-      <TopSongs spotifyToken={spotifyToken}></TopSongs>
+      {spotifyToken ? (
+        <TopSongs spotifyToken={spotifyToken}></TopSongs>
+      ) : (
+        <SpotifyButton></SpotifyButton>
+      )}
     </main>
   );
 }
