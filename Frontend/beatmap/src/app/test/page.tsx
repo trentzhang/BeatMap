@@ -1,4 +1,4 @@
-import client from "@/app/MongoDB/Connect";
+import client from "@/app/MongoDB/connect";
 
 async function run() {
   try {

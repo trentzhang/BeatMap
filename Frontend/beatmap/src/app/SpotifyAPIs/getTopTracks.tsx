@@ -1,16 +1,4 @@
-async function fetchWebApi(
-  endpoint: string,
-  method: string,
-  token: any | string
-) {
-  const res = await fetch(`https://api.spotify.com/${endpoint}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    method,
-  });
-  return await res.json();
-}
+import { fetchWebApi } from "./connect";
 
 export async function getTopTracks(spotifyToken: string) {
   return (
