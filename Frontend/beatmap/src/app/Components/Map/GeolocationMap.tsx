@@ -52,17 +52,17 @@ export const Map: React.FC = () => {
     }, [map]);
     return null;
   };
-
+  // mix-blend-hard-light,mix-blend-lighten
   return (
     <MapContainer
-      className="h-full w-full"
+      className="aspect-square w-full sm:aspect-auto sm:h-full rounded-full  shadow-2xl "
       center={[position.latitude, position.longitude]}
       zoom={13}
       scrollWheelZoom={true}
     >
       <UpdateMapCenter />
       <TileLayer
-        attribution="Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ"
+        // attribution="Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ"
         url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
         maxZoom={16}
       />

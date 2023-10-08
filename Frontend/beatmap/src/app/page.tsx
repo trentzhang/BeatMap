@@ -1,9 +1,7 @@
 import SpotifyButton from "./Components/ConnectMusicButtons/SpotifyButton";
 import Map from "./Components/Map";
-import { useParams } from "next/navigation";
+import TopSongs from "./Components/SpotifyTrackCardsGroup/CardsGroup";
 import client from "./MongoDB/Connect";
-import TopSongs from "@/app/SpotifyAPIs/getTopTracks";
-import { useRouter } from "next/router";
 
 const client_id = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
@@ -79,9 +77,9 @@ export default async function Home({
   const spotifyToken = await spotifyCode2Token(currentSpotifyCode);
   console.log("spotifyToken :>> ", spotifyToken);
   return (
-    <main className="flex min-h-screen flex-col items-center justify-normal py-14">
+    <main className="flex min-h-screen flex-col items-center justify-normal py-14 mt-5">
       <div className="z-50 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit    lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
+        <p className="fixed  left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit    ">
           Welcome to BeatMap
         </p>
 
@@ -92,9 +90,18 @@ export default async function Home({
         </div>
       </div>
 
-      <div className="h-[70vh] mt-6 w-full z-0">
+      <div className="relative h-[60vh]  w-full flex items-center justify-center p-8 ">
+        <div
+          className="absolute h-full w-full bg-gradient-to-r
+    from-pink-400
+    via-red-400
+    to-yellow-400
+    background-animate blur-sm"
+        ></div>
+        {/* <div className="absolute h-1/3 w-full bg-green  z-20"></div> */}
         <Map></Map>
       </div>
+
       {spotifyToken ? (
         <TopSongs spotifyToken={spotifyToken}></TopSongs>
       ) : (
