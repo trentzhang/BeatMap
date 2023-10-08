@@ -1,7 +1,7 @@
 import SpotifyButton from "./Components/ConnectMusicButtons/SpotifyButton";
 import Map from "./Components/Map";
 import TopSongs from "./Components/SpotifyTrackCardsGroup/CardsGroup";
-import client from "./MongoDB/connect";
+import client from "./MongoDB/Connect";
 
 const client_id = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;

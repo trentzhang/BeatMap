@@ -49,9 +49,9 @@ export default async function MusicComponent({
         >
           <path
             stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="m1 7 4 4 4-4M1 1l4 4 4-4"
           />
         </svg>
