@@ -83,7 +83,7 @@ export default async function Home({
           Welcome to BeatMap
         </p>
 
-        <div className="fixed bottom-0 left-0 flex h-12 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black  lg:bg-none">
+        <div className="fixed bottom-4 left-1/3 flex h-12 w-1/3 rounded-full items-center justify-center bg-gradient-to-b from-white  dark:from-black dark:via-black  lg:bg-none">
           <div className="pointer-events-none flex place-items-center gap-2 pb-1 ">
             By Trent Zhang
           </div>

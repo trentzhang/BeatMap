@@ -55,7 +55,7 @@ export const Map: React.FC = () => {
   // mix-blend-hard-light,mix-blend-lighten
   return (
     <MapContainer
-      className="aspect-square w-full sm:aspect-auto sm:h-full rounded-full  shadow-2xl "
+      className="aspect-square w-full z-0 sm:aspect-auto sm:h-full rounded-full  shadow-2xl "
       center={[position.latitude, position.longitude]}
       zoom={13}
       scrollWheelZoom={true}

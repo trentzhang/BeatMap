@@ -1,5 +1,3 @@
-// const token = process.env.MY_SPOTIFY_TEST_TOKEN;
-
 async function fetchWebApi(
   endpoint: string,
   method: string,

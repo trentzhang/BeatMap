@@ -25,6 +25,5 @@ async function run() {
 
 export default function test(params: any) {
   run().catch(console.dir);
-  console.log("process.env :>> ", process.env.REACT_APP_API_URL);
   return <div className="text-5xl">Hello</div>;
 }
