@@ -2,10 +2,6 @@
 
 import { useRef, useState } from "react";
 
-interface AudioPlayerProps {
-  audioUrl: string;
-}
-
 const PlayButton = ({ preview_url }: { preview_url: string }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
