@@ -1,43 +1,13 @@
-import { Collection } from "mongodb";
-import SpotifyButton from "./Components/ConnectMusicButtons/SpotifyButton";
 import { Footer } from "./Components/Footer";
 import { Header } from "./Components/Header";
 import Map from "./Components/Map";
+
 import TopSongs from "./Components/SpotifyTrackCardsGroup/CardsGroup";
-import client from "./Utils/MongoDB/Connect";
+import { profileDefault } from "./Utils/DefaultVariables";
+import { post2MongoDB } from "./Utils/MongoDB/addUserData";
 import { spotifyCode2Token } from "./Utils/SpotifyAPIs/code2Token";
 import { getProfile } from "./Utils/SpotifyAPIs/getProfile";
 import { getTopTracks } from "./Utils/SpotifyAPIs/getTopTracks";
-
-async function post2MongoDB(
-  authorizationInfo = {},
-  topTracks = {},
-  profile = { id: "" }
-) {
-  // upload authorizationInfo, profile, topTracks to mongodb
-
-  try {
-    await client.connect();
-    const db = client.db("BeatMap");
-    const collection = db.collection("User");
-
-    const filter = { "profile.id": profile.id };
-    const data = {
-      $set: {
-        authorizationInfo: authorizationInfo,
-        topTracks: topTracks,
-        profile: profile,
-      },
-    };
-    await collection.updateOne(filter, data, {
-      upsert: true,
-    });
-  } catch (error) {
-    console.log("error :>> ", error);
-  } finally {
-    await client.close();
-  }
-}
 
 export default async function Home({
   searchParams,
@@ -45,9 +15,11 @@ export default async function Home({
   searchParams: { [key: string]: string | undefined };
 }) {
   let currentSpotifyCode = searchParams?.code ?? "";
+  let latitude = searchParams?.latitude ?? "";
+  let longitude = searchParams?.longitude ?? "";
+  let location = { latitude: latitude, longitude: longitude };
   let topTracks = [];
-  let currentUser = "";
-  let profile = { display_name: "", id: "" };
+  let profile = profileDefault;
 
   if (currentSpotifyCode) {
     const authorizationInfo = await spotifyCode2Token(currentSpotifyCode);
@@ -58,8 +30,7 @@ export default async function Home({
       getProfile(spotifyToken),
     ]);
 
-    currentUser = profile?.display_name;
-    post2MongoDB(authorizationInfo, topTracks, profile);
+    post2MongoDB(authorizationInfo, topTracks, profile, location);
   }
 
   return (
@@ -69,7 +40,7 @@ export default async function Home({
         bg-gradient-to-t from-slate-600 via-slate-300  
         background-animate "
     >
-      <Header currentUser={currentUser}></Header>
+      <Header currentUser={profile.display_name}></Header>
 
       <section className="mb-auto h-full w-full flex flex-col items-center justify-normal">
         <section

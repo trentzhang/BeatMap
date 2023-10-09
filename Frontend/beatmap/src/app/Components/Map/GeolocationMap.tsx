@@ -4,7 +4,7 @@ import L from "leaflet";
 import React, { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 interface Position {
   latitude: number;
   longitude: number;
@@ -23,17 +23,31 @@ export const Map: React.FC = () => {
     latitude: 40.116421,
     longitude: -88.243385,
   });
-  //   const [mapLoaded, setMapLoaded] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     // Get user's current location using Geolocation API
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (geoPosition) => {
-          setPosition({
+          const coords = {
             latitude: geoPosition.coords.latitude,
             longitude: geoPosition.coords.longitude,
-          });
+          };
+          setPosition(coords);
+
+          // push location to current url
+          const current = new URLSearchParams(searchParams);
+
+          current.set("latitude", String(coords.latitude));
+          current.set("longitude", String(coords.longitude));
+
+          const search = current.toString();
+          const query = search ? `?${search}` : "";
+
+          router.push(`${pathname}${query}`);
         },
         (error) => {
           console.error("Error getting geolocation:", error.message);
