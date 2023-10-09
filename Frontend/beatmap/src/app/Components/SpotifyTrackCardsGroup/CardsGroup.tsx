@@ -4,7 +4,7 @@ import { Accordion, AccordionItem } from "@nextui-org/react";
 import { Card, CardBody } from "@nextui-org/react";
 export default function MusicComponent({ topTracks }: { topTracks: [] }) {
   return (
-    <div className="w-full h-full">
+   
       <Card className="mx-5 min-h-[30em] bg-gradient-to-b from-blue-600 to-slate-500">
         <CardBody>
           {/* <Accordion className="w-full"> */}
@@ -46,6 +46,6 @@ export default function MusicComponent({ topTracks }: { topTracks: [] }) {
           {/* </Accordion> */}
         </CardBody>
       </Card>
-    </div>
+
   );
 }

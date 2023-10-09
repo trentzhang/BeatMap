@@ -8,12 +8,6 @@ import { spotifyCode2Token } from "./SpotifyAPIs/code2Token";
 import { getProfile } from "./SpotifyAPIs/getProfile";
 import { getTopTracks } from "./SpotifyAPIs/getTopTracks";
 
-const LoadingPlaceholder = () => (
-  <div className="h-[70vh] mt-6 w-fullflex items-center justify-center">
-    <div className="border-t-4 border-blue-500 border-solid rounded-full animate-spin h-12 w-12"></div>
-  </div>
-);
-
 export default async function Home({
   searchParams,
 }: {
@@ -23,8 +17,13 @@ export default async function Home({
   const authorizationInfo = await spotifyCode2Token(currentSpotifyCode);
   const spotifyToken = authorizationInfo.access_token;
 
-  const topTracks = await getTopTracks(spotifyToken);
-  const profile = await getProfile(spotifyToken);
+  // Use Promise.all to synchronize getTopTracks and getProfile
+  const [topTracks, profile] = await Promise.all([
+    getTopTracks(spotifyToken),
+    getProfile(spotifyToken),
+  ]);
+
+  const currentUser = profile?.display_name;
 
   // upload authorizationInfo, profile, topTracks to mongodb
   if (currentSpotifyCode && authorizationInfo && topTracks && profile) {
@@ -44,9 +43,10 @@ export default async function Home({
       await collection.updateOne(filter, data, {
         upsert: true,
       });
-      await client.close();
     } catch (error) {
       console.log("error :>> ", error);
+    } finally {
+      await client.close();
     }
   }
 
@@ -57,19 +57,20 @@ export default async function Home({
         bg-gradient-to-t from-slate-600 via-slate-300  
         background-animate "
     >
-      <Header></Header>
+      <Header currentUser={currentUser}></Header>
 
-      <div className="mt-16 mb-auto h-full w-full flex flex-col items-center justify-normal">
-        <div className="relative h-[60vh]  w-full flex items-center justify-center">
+      <section className="mb-auto h-full w-full flex flex-col items-center justify-normal">
+        <section
+          className="relative h-[60vh]  w-full flex items-center justify-center"
+          id="homepage-map"
+        >
           <Map></Map>
-        </div>
-
-        {spotifyToken ? (
-          <TopSongs topTracks={topTracks}></TopSongs>
-        ) : (
-          <SpotifyButton></SpotifyButton>
-        )}
-      </div>
+        </section>
+        {/* TODO: add a welcome sentence  */}
+        <section className="w-full h-full" id="homepage-my-songs">
+          {spotifyToken ? <TopSongs topTracks={topTracks}></TopSongs> : null}
+        </section>
+      </section>
 
       <Footer></Footer>
     </main>

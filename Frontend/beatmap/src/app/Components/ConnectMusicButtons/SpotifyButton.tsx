@@ -1,4 +1,7 @@
 "use client";
+
+import { Button } from "@nextui-org/react";
+
 // import { useEffect } from "react";
 
 export function stringifyParams(queryParams: any): string {
@@ -30,15 +33,9 @@ function SpotifyButton(params: any) {
     window.location.href = authUrl;
   }
   return (
-    <div>
-      <button
-        type="button"
-        className="my-5 text-gray-900 bg-[#1DB954] hover:bg-[#1DB954]/90 focus:ring-4 focus:outline-none focus:ring-[#1DB954]/50  rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#1DB954]/50 mr-2 mb-2"
-        onClick={handleConnect}
-      >
-        Connect to spotify
-      </button>
-    </div>
+    <Button className="" color="primary" variant="flat" onClick={handleConnect}>
+      Connect to spotify
+    </Button>
   );
 }
 export default SpotifyButton;

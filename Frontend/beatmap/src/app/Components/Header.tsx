@@ -1,9 +1,56 @@
-export const Header = () => {
+"use client";
+
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  Link,
+  Button,
+} from "@nextui-org/react";
+import SpotifyButton from "./ConnectMusicButtons/SpotifyButton";
+import React, { useState, useEffect, useRef } from "react";
+
+export const Header = ({ currentUser = "" }) => {
+  const [activeSection, setActiveSection] = useState(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const handleScroll = () => {
+    const position = window.scrollY;
+    setScrollPosition(position);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {}, [scrollPosition]);
+
   return (
-    <div className="z-50 max-w-5xl w-full items-center justify-between  text-sm lg:flex">
-      <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit    ">
-        Welcome to BeatMap
-      </p>
-    </div>
+    <Navbar className="backdrop-blur-lg">
+      <NavbarBrand>
+        <p className="font-bold text-inherit">BeatMap</p>
+      </NavbarBrand>
+      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        <NavbarItem isActive>
+          <Link color="foreground" href="#homepage-map">
+            Map
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link color="foreground" href="#homepage-my-songs">
+            Top Songs
+          </Link>
+        </NavbarItem>
+      </NavbarContent>
+      <NavbarContent justify="end">
+        <NavbarItem>
+          {currentUser ? `Hey ${currentUser}` : <SpotifyButton></SpotifyButton>}
+        </NavbarItem>
+      </NavbarContent>
+    </Navbar>
   );
 };
