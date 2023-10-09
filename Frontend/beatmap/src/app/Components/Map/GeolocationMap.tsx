@@ -1,25 +1,15 @@
 "use client";
 // Map.tsx
 import L from "leaflet";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-interface Position {
-  latitude: number;
-  longitude: number;
-}
-
-// Define types for props
-interface MapProps {
-  mapLoaded: boolean;
-  setMapLoaded: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
 const icon = L.icon({ iconUrl: "/marker-icon.png" });
 
 export const Map: React.FC = () => {
-  const [position, setPosition] = useState<Position>({
+  const [currentPosition, setCurrentPosition] = useState({
     latitude: 40.116421,
     longitude: -88.243385,
   });
@@ -27,8 +17,11 @@ export const Map: React.FC = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const [map, setMap] = useState(null);
+  const [bounds, setBounds] = useState(null);
+
+  // Get user's current location using Geolocation API
   useEffect(() => {
-    // Get user's current location using Geolocation API
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (geoPosition) => {
@@ -36,7 +29,7 @@ export const Map: React.FC = () => {
             latitude: geoPosition.coords.latitude,
             longitude: geoPosition.coords.longitude,
           };
-          setPosition(coords);
+          setCurrentPosition(coords);
 
           // push location to current url
           const current = new URLSearchParams(searchParams);
@@ -56,31 +49,59 @@ export const Map: React.FC = () => {
     } else {
       console.error("Geolocation is not supported by your browser.");
     }
-  }, []);
+  }, [router, pathname, searchParams]);
 
-  // Custom hook to update the map center when the position changes
-  const UpdateMapCenter = () => {
-    const map = useMap();
-    useEffect(() => {
-      map.setView([position.latitude, position.longitude], map.getZoom());
-    }, [map]);
-    return null;
-  };
+  useEffect(() => {
+    const onMove = () => {
+      // Clear the previous timeout if it exists
+      clearTimeout(moveTimeout);
+
+      // Set a new timeout
+      moveTimeout = setTimeout(() => {
+        setBounds(map.getBounds());
+        console.log("bounds :>> ", map.getBounds());
+      }, 2000); // Adjust the delay time as needed
+    };
+    if (map) {
+      map.on("move", onMove);
+      return () => {
+        map.off("move", onMove);
+      };
+    }
+  }, [map]);
+
+  // Declare moveTimeout outside of the component to persist its value
+  let moveTimeout: any;
+
+  useEffect(() => {
+    if (map) {
+      map.setView(
+        [currentPosition.latitude, currentPosition.longitude],
+        map.getZoom()
+      );
+    }
+  }, [map, currentPosition]);
+
   // mix-blend-hard-light,mix-blend-lighten
   return (
     <MapContainer
       className="aspect-square w-full z-0 transition-all duration-700 mask-image-my shadow-md sm:aspect-auto sm:h-full     hover:shadow-2xl  "
-      center={[position.latitude, position.longitude]}
+      center={[currentPosition.latitude, currentPosition.longitude]}
       zoom={13}
       scrollWheelZoom={true}
+      ref={setMap}
     >
-      <UpdateMapCenter />
+      {/* <UpdateMapCenter /> */}
+      {/* <FetchNearByUser></FetchNearByUser> */}
       <TileLayer
         // attribution="Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ"
         url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
         maxZoom={16}
       />
-      <Marker position={[position.latitude, position.longitude]} icon={icon}>
+      <Marker
+        position={[currentPosition.latitude, currentPosition.longitude]}
+        icon={icon}
+      >
         <Popup>
           A pretty CSS3 popup. <br /> Easily customizable.
         </Popup>

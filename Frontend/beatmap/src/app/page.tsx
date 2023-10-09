@@ -15,9 +15,11 @@ export default async function Home({
   searchParams: { [key: string]: string | undefined };
 }) {
   let currentSpotifyCode = searchParams?.code ?? "";
+
   let latitude = searchParams?.latitude ?? "";
   let longitude = searchParams?.longitude ?? "";
   let location = { latitude: latitude, longitude: longitude };
+
   let topTracks = [];
   let profile = profileDefault;
 
