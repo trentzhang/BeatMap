@@ -15,9 +15,6 @@ export async function fetchWebApi(
       console.log(
         `HTTP error! Status: ${response.status}, Status Text: ${response.statusText}`
       );
-      //   throw new Error(
-      //     `HTTP error!  ${{ Status: response.status, Response: response.body }}`
-      //   );
     }
 
     const data = await response.json();
@@ -29,6 +26,7 @@ export async function fetchWebApi(
           Authorization: `Bearer ${token}`,
         },
       });
+      return null;
     }
     return data;
   } catch (error) {

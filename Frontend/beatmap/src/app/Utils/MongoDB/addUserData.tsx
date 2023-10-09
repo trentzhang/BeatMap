@@ -21,6 +21,9 @@ export async function post2MongoDB(
         topTracks: topTracks,
         profile: profile,
         location: location,
+        updatedAt: new Date().toLocaleString("en-US", {
+          timeZone: "America/Chicago",
+        }),
       },
     };
     await collection.updateOne(filter, data, {

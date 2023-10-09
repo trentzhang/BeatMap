@@ -3,12 +3,13 @@ import { Header } from "./Components/Header";
 import Map from "./Components/Map";
 
 import TopSongs from "./Components/SpotifyTrackCardsGroup/CardsGroup";
-import { profileDefault } from "./Utils/DefaultVariables";
+import { profileDefault, topTracksDefault } from "./Utils/DefaultVariables";
 import { post2MongoDB } from "./Utils/MongoDB/addUserData";
 import { spotifyCode2Token } from "./Utils/SpotifyAPIs/code2Token";
 import { getProfile } from "./Utils/SpotifyAPIs/getProfile";
 import { getTopTracks } from "./Utils/SpotifyAPIs/getTopTracks";
 
+// export const dynamic = "force-dynamic";
 export default async function Home({
   searchParams,
 }: {
@@ -20,7 +21,7 @@ export default async function Home({
   let longitude = searchParams?.longitude ?? "";
   let location = { latitude: latitude, longitude: longitude };
 
-  let topTracks = {};
+  let topTracks = topTracksDefault;
   let profile = profileDefault;
 
   if (currentSpotifyCode) {
@@ -33,12 +34,14 @@ export default async function Home({
         getTopTracks(spotifyToken),
         getProfile(spotifyToken),
       ]);
-
-      post2MongoDB(authorizationInfo, topTracks, profile, location);
+      if (authorizationInfo && topTracks && profile && location.latitude) {
+        post2MongoDB(authorizationInfo, topTracks, profile, location);
+      }
     } catch (error) {
       console.log("error :>> ", error);
     }
   }
+  //   console.log("topTracks :>> ", topTracks.items[0]);
 
   return (
     <main
