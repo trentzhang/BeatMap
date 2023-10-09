@@ -1,13 +1,24 @@
-export const fetchWebApi = async (
+export async function fetchWebApi(
   endpoint: string,
   method: string,
-  token: any | string
-) => {
-  const res = await fetch(`https://api.spotify.com/${endpoint}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    method,
-  });
-  return await res.json();
-};
+  token: string
+) {
+  try {
+    const response = await fetch(`https://api.spotify.com/${endpoint}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      method,
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error in fetchWebApi:", error);
+    throw error;
+  }
+}

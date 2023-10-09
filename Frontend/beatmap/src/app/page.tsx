@@ -20,19 +20,24 @@ export default async function Home({
   let longitude = searchParams?.longitude ?? "";
   let location = { latitude: latitude, longitude: longitude };
 
-  let topTracks = [];
+  let topTracks = {};
   let profile = profileDefault;
 
   if (currentSpotifyCode) {
-    const authorizationInfo = await spotifyCode2Token(currentSpotifyCode);
-    const spotifyToken = authorizationInfo.access_token;
-    // Use Promise.all to synchronize getTopTracks and getProfile
-    [topTracks, profile] = await Promise.all([
-      getTopTracks(spotifyToken),
-      getProfile(spotifyToken),
-    ]);
+    try {
+      const authorizationInfo = await spotifyCode2Token(currentSpotifyCode);
+      const spotifyToken = authorizationInfo.access_token;
 
-    post2MongoDB(authorizationInfo, topTracks, profile, location);
+      // Use Promise.all to synchronize getTopTracks and getProfile
+      [topTracks, profile] = await Promise.all([
+        getTopTracks(spotifyToken),
+        getProfile(spotifyToken),
+      ]);
+
+      post2MongoDB(authorizationInfo, topTracks, profile, location);
+    } catch (error) {
+      console.log("error :>> ", error);
+    }
   }
 
   return (
@@ -54,7 +59,7 @@ export default async function Home({
         {/* TODO: add a welcome sentence  */}
         <section className="w-full h-full" id="homepage-my-songs">
           {currentSpotifyCode ? (
-            <TopSongs topTracks={topTracks}></TopSongs>
+            <TopSongs topTracks={topTracks.items}></TopSongs>
           ) : null}
         </section>
       </section>

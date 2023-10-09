@@ -27,7 +27,6 @@ export async function spotifyCode2Token(currentSpotifyCode: string) {
         return res;
       })
       .catch((e) => console.log("e :>> ", e));
-    // console.log("spotifyToken :>> ", spotifyToken);
   }
   return res;
 }
