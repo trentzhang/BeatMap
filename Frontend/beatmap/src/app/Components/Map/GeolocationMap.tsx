@@ -1,6 +1,6 @@
 "use client";
 // Map.tsx
-import L from "leaflet";
+import L, { LatLngBounds, Map } from "leaflet";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -8,7 +8,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const icon = L.icon({ iconUrl: "/marker-icon.png" });
 
-export const Map: React.FC = () => {
+function MyMap() {
   const [currentPosition, setCurrentPosition] = useState({
     latitude: 40.116421,
     longitude: -88.243385,
@@ -17,8 +17,8 @@ export const Map: React.FC = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [map, setMap] = useState(null);
-  const [bounds, setBounds] = useState(null);
+  const [map, setMap] = useState<Map>();
+  const [bounds, setBounds] = useState<LatLngBounds>();
 
   // Get user's current location using Geolocation API
   useEffect(() => {
@@ -52,26 +52,26 @@ export const Map: React.FC = () => {
   }, [router, pathname, searchParams]);
 
   useEffect(() => {
-    const onMove = () => {
-      // Clear the previous timeout if it exists
-      clearTimeout(moveTimeout);
+    let moveTimeout: NodeJS.Timeout;
 
-      // Set a new timeout
-      moveTimeout = setTimeout(() => {
-        setBounds(map.getBounds());
-        console.log("bounds :>> ", map.getBounds());
-      }, 2000); // Adjust the delay time as needed
-    };
     if (map) {
+      const onMove = () => {
+        // Clear the previous timeout if it exists
+        clearTimeout(moveTimeout);
+
+        // Set a new timeout
+        moveTimeout = setTimeout(() => {
+          setBounds(map.getBounds());
+          console.log("bounds :>> ", map.getBounds());
+        }, 1000); // Adjust the delay time as needed
+      };
+
       map.on("move", onMove);
       return () => {
         map.off("move", onMove);
       };
     }
   }, [map]);
-
-  // Declare moveTimeout outside of the component to persist its value
-  let moveTimeout: any;
 
   useEffect(() => {
     if (map) {
@@ -89,6 +89,7 @@ export const Map: React.FC = () => {
       center={[currentPosition.latitude, currentPosition.longitude]}
       zoom={13}
       scrollWheelZoom={true}
+      // @ts-ignore
       ref={setMap}
     >
       {/* <UpdateMapCenter /> */}
@@ -108,7 +109,6 @@ export const Map: React.FC = () => {
       </Marker>
     </MapContainer>
   );
-};
+}
 
-// export default DynamicMap;
-export default Map;
+export default MyMap;
