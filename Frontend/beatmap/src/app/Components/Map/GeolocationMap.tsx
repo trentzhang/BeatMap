@@ -51,6 +51,7 @@ function MyMap() {
     }
   }, [router, pathname, searchParams]);
 
+  // Get users that in current map area
   useEffect(() => {
     let moveTimeout: NodeJS.Timeout;
 
