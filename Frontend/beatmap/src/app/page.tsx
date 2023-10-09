@@ -1,3 +1,4 @@
+import { Collection } from "mongodb";
 import SpotifyButton from "./Components/ConnectMusicButtons/SpotifyButton";
 import { Footer } from "./Components/Footer";
 import { Header } from "./Components/Header";
@@ -7,6 +8,36 @@ import client from "./MongoDB/Connect";
 import { spotifyCode2Token } from "./SpotifyAPIs/code2Token";
 import { getProfile } from "./SpotifyAPIs/getProfile";
 import { getTopTracks } from "./SpotifyAPIs/getTopTracks";
+
+async function post2MongoDB(
+  authorizationInfo = {},
+  topTracks = {},
+  profile = { id: "" }
+) {
+  // upload authorizationInfo, profile, topTracks to mongodb
+
+  try {
+    await client.connect();
+    const db = client.db("BeatMap");
+    const collection = db.collection("User");
+
+    const filter = { "profile.id": profile.id };
+    const data = {
+      $set: {
+        authorizationInfo: authorizationInfo,
+        topTracks: topTracks,
+        profile: profile,
+      },
+    };
+    await collection.updateOne(filter, data, {
+      upsert: true,
+    });
+  } catch (error) {
+    console.log("error :>> ", error);
+  } finally {
+    await client.close();
+  }
+}
 
 export default async function Home({
   searchParams,
@@ -25,29 +56,8 @@ export default async function Home({
 
   const currentUser = profile?.display_name;
 
-  // upload authorizationInfo, profile, topTracks to mongodb
-  if (currentSpotifyCode && authorizationInfo && topTracks && profile) {
-    try {
-      await client.connect();
-      const db = client.db("BeatMap");
-      const collection = db.collection("User");
-
-      const filter = { "profile.id": profile.id };
-      const data = {
-        $set: {
-          authorizationInfo: authorizationInfo,
-          topTracks: topTracks,
-          profile: profile,
-        },
-      };
-      await collection.updateOne(filter, data, {
-        upsert: true,
-      });
-    } catch (error) {
-      console.log("error :>> ", error);
-    } finally {
-      await client.close();
-    }
+  if (authorizationInfo) {
+    post2MongoDB(authorizationInfo, topTracks, profile);
   }
 
   return (
