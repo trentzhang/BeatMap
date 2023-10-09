@@ -44,19 +44,21 @@ export default async function Home({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) {
-  const currentSpotifyCode = searchParams?.code ?? "";
-  const authorizationInfo = await spotifyCode2Token(currentSpotifyCode);
-  const spotifyToken = authorizationInfo.access_token;
+  let currentSpotifyCode = searchParams?.code ?? "";
+  let topTracks = [{}];
+  let currentUser = "";
+  let profile = { display_name: "", id: "" };
 
-  // Use Promise.all to synchronize getTopTracks and getProfile
-  const [topTracks, profile] = await Promise.all([
-    getTopTracks(spotifyToken),
-    getProfile(spotifyToken),
-  ]);
+  if (currentSpotifyCode) {
+    const authorizationInfo = await spotifyCode2Token(currentSpotifyCode);
+    const spotifyToken = authorizationInfo.access_token;
+    // Use Promise.all to synchronize getTopTracks and getProfile
+    [topTracks, profile] = await Promise.all([
+      getTopTracks(spotifyToken),
+      getProfile(spotifyToken),
+    ]);
 
-  const currentUser = profile?.display_name;
-
-  if (authorizationInfo) {
+    currentUser = profile?.display_name;
     post2MongoDB(authorizationInfo, topTracks, profile);
   }
 
@@ -78,7 +80,9 @@ export default async function Home({
         </section>
         {/* TODO: add a welcome sentence  */}
         <section className="w-full h-full" id="homepage-my-songs">
-          {spotifyToken ? <TopSongs topTracks={topTracks}></TopSongs> : null}
+          {currentSpotifyCode ? (
+            <TopSongs topTracks={topTracks}></TopSongs>
+          ) : null}
         </section>
       </section>
 
