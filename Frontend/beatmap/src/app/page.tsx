@@ -27,25 +27,27 @@ export default async function Home({
   const profile = await getProfile(spotifyToken);
 
   // upload authorizationInfo, profile, topTracks to mongodb
-  try {
-    await client.connect();
-    const db = client.db("BeatMap");
-    const collection = db.collection("User");
+  if (currentSpotifyCode && authorizationInfo && topTracks && profile) {
+    try {
+      await client.connect();
+      const db = client.db("BeatMap");
+      const collection = db.collection("User");
 
-    const filter = { "profile.id": profile.id };
-    const data = {
-      $set: {
-        authorizationInfo: authorizationInfo,
-        topTracks: topTracks,
-        profile: profile,
-      },
-    };
-    await collection.updateOne(filter, data, {
-      upsert: true,
-    });
-    await client.close();
-  } catch (error) {
-    console.log("error :>> ", error);
+      const filter = { "profile.id": profile.id };
+      const data = {
+        $set: {
+          authorizationInfo: authorizationInfo,
+          topTracks: topTracks,
+          profile: profile,
+        },
+      };
+      await collection.updateOne(filter, data, {
+        upsert: true,
+      });
+      await client.close();
+    } catch (error) {
+      console.log("error :>> ", error);
+    }
   }
 
   return (
