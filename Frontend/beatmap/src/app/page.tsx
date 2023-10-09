@@ -4,10 +4,10 @@ import { Footer } from "./Components/Footer";
 import { Header } from "./Components/Header";
 import Map from "./Components/Map";
 import TopSongs from "./Components/SpotifyTrackCardsGroup/CardsGroup";
-import client from "./MongoDB/Connect";
-import { spotifyCode2Token } from "./SpotifyAPIs/code2Token";
-import { getProfile } from "./SpotifyAPIs/getProfile";
-import { getTopTracks } from "./SpotifyAPIs/getTopTracks";
+import client from "./Utils/MongoDB/Connect";
+import { spotifyCode2Token } from "./Utils/SpotifyAPIs/code2Token";
+import { getProfile } from "./Utils/SpotifyAPIs/getProfile";
+import { getTopTracks } from "./Utils/SpotifyAPIs/getTopTracks";
 
 async function post2MongoDB(
   authorizationInfo = {},
@@ -45,7 +45,7 @@ export default async function Home({
   searchParams: { [key: string]: string | undefined };
 }) {
   let currentSpotifyCode = searchParams?.code ?? "";
-  let topTracks = [{}];
+  let topTracks = [];
   let currentUser = "";
   let profile = { display_name: "", id: "" };
 

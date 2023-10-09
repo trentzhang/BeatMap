@@ -1,17 +1,17 @@
 "use client";
 
 import {
+  Link,
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Link,
-  Button,
 } from "@nextui-org/react";
+import { useEffect, useState } from "react";
 import SpotifyButton from "./ConnectMusicButtons/SpotifyButton";
-import React, { useState, useEffect, useRef } from "react";
 
 export const Header = ({ currentUser = "" }) => {
+  // TODO highlight current section
   const [activeSection, setActiveSection] = useState(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const handleScroll = () => {
