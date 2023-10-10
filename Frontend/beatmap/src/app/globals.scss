@@ -3,19 +3,19 @@
 @tailwind utilities;
 
 .background-animate {
-  background-size: auto 150%;
+  background-size: auto 300%;
 
-  -webkit-animation: AnimationName 3s ease forwards;
-  -moz-animation: AnimationName 3s ease forwards;
-  animation: AnimationName 3s ease forwards;
+  -webkit-animation: AnimationName 5s ease forwards;
+  -moz-animation: AnimationName 5s ease forwards;
+  animation: AnimationName 5s ease forwards;
 }
 
 @keyframes AnimationName {
   0% {
-    background-position: 0% 0%;
+    background-position: 25% 25%;
   }
   100% {
-    background-position: 100% 100%;
+    background-position: 80% 80%;
   }
 }
 

@@ -6,8 +6,10 @@ export async function GET(request: NextRequest) {
   let users;
   try {
     const searchParams = request.nextUrl.searchParams;
-    const southwest = JSON.parse(searchParams.get("southwest"));
-    const northeast = JSON.parse(searchParams.get("northeast"));
+    let southwest = searchParams.get("southwest");
+    let northeast = searchParams.get("northeast");
+    southwest = southwest ? JSON.parse(southwest) : null;
+    northeast = northeast ? JSON.parse(northeast) : null;
 
     await client.connect();
     const db = client.db("BeatMap");

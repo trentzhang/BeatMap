@@ -32,13 +32,21 @@ export default async function Home({
       const authorizationInfo = await spotifyCode2Token(currentSpotifyCode);
       const spotifyToken = authorizationInfo.access_token;
 
-      // Use Promise.all to synchronize getTopTracks and getProfile
-      [topTracks, profile] = await Promise.all([
-        getTopTracks(spotifyToken),
-        getProfile(spotifyToken),
-      ]);
-      if (authorizationInfo && topTracks && profile && latitude && longitude) {
-        post2MongoDB(authorizationInfo, topTracks, profile, location);
+      if (spotifyToken) {
+        // Use Promise.all to synchronize getTopTracks and getProfile
+        [topTracks, profile] = await Promise.all([
+          getTopTracks(spotifyToken),
+          getProfile(spotifyToken),
+        ]);
+        if (
+          authorizationInfo &&
+          topTracks &&
+          profile &&
+          latitude &&
+          longitude
+        ) {
+          post2MongoDB(authorizationInfo, topTracks, profile, location);
+        }
       }
     } catch (error) {
       console.log("error :>> ", error);
