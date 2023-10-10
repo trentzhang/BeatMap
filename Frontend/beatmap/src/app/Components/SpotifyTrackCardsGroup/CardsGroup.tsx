@@ -8,36 +8,28 @@ export default function MusicComponent() {
   const { selectedUser, setSelectedUser } = useUserContext();
   const topTracks = selectedUser?.topTracks || null;
   const MyCard = (
-    <motion.div
-      initial={{ opacity: 0, y: "5%" }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: "5%" }}
-      transition={{ duration: 0.15 }}
-      key={selectedUser?._id}
-    >
-      <Card className="m-5 min-h-[40em] max-h-[calc(100vh-200px)] bg-gradient-to-b from-blue-600 to-slate-500">
-        <CardBody>
-          <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-300  mb-5">
-            Top 50 Songs
-          </h1>
+    <Card className="m-5 min-h-[40em] max-h-[calc(100vh-200px)] bg-gradient-to-b from-blue-600 to-sky-600">
+      <CardBody>
+        <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-300  mb-5">
+          Top 50 Songs
+        </h1>
 
-          <ScrollShadow hideScrollBar className="w-full h-full">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {topTracks?.items?.map((topTrack) => (
-                <SpotifyCard
-                  topTrack={topTrack}
-                  key={topTrack.id}
-                ></SpotifyCard>
-              ))}
-            </div>
-          </ScrollShadow>
-        </CardBody>
-      </Card>
-    </motion.div>
+        <ScrollShadow hideScrollBar className="w-full h-full">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {topTracks?.items?.map((topTrack) => (
+              <SpotifyCard topTrack={topTrack} key={topTrack.id}></SpotifyCard>
+            ))}
+          </div>
+        </ScrollShadow>
+      </CardBody>
+    </Card>
   );
   const NothingHereCard = (
-    <Card className="mx-5 min-h-[20em]  bg-gradient-to-b from-blue-600 to-sky-600">
-      <CardBody className="flex items-center justify-center">
+    <Card className="m-5 min-h-[40em] max-h-[calc(100vh-200px)] bg-gradient-to-b from-blue-600 to-sky-600">
+      <CardBody className="flex items-center justify-evenly">
+        <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-300  mb-5">
+          Connect to Spotify to see your music here
+        </h1>
         <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-300  mb-5">
           Select a user to see their top tracks
         </h1>
@@ -47,7 +39,15 @@ export default function MusicComponent() {
 
   return (
     <AnimatePresence mode="wait">
-      {selectedUser ? MyCard : null}
+      <motion.div
+        initial={{ opacity: 0, y: "5%" }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: "5%" }}
+        transition={{ duration: 0.15 }}
+        key={selectedUser?._id}
+      >
+        {selectedUser ? MyCard : NothingHereCard}
+      </motion.div>
     </AnimatePresence>
   );
 }

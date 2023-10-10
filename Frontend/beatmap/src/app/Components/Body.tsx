@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import TopSongs from "./SpotifyTrackCardsGroup/CardsGroup";
 import { motion, useAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
-import { UserProvider, useUserContext } from "./SelectedUserContext";
+import { UserProvider } from "./SelectedUserContext";
 export default function Body() {
   return (
     <UserProvider>

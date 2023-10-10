@@ -3,8 +3,15 @@
 import L, { Map } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { createContext, useEffect, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { createContext, useEffect, useMemo, useState } from "react";
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import { useUserContext } from "../SelectedUserContext";
 
@@ -37,133 +44,146 @@ const fetchUsersInBounds = async (bounds: any) => {
 };
 
 function MyMap() {
-  const [currentPosition, setCurrentPosition] = useState({
-    latitude: 40.116421,
-    longitude: -88.243385,
-  });
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  //   const router = useRouter();
+  //   const pathname = usePathname();
+  //   const searchParams = useSearchParams();
 
-  const [map, setMap] = useState<Map>();
-  const [usersInBounds, setUsersInBounds] = useState([]);
   const { selectedUser, setSelectedUser } = useUserContext();
 
   // Get user's current location and update url
-  useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (geoPosition) => {
-          const coords = {
-            latitude: geoPosition.coords.latitude,
-            longitude: geoPosition.coords.longitude,
-          };
-          setCurrentPosition(coords);
+  //   useEffect(() => {
+  //     if ("geolocation" in navigator) {
+  //       navigator.geolocation.getCurrentPosition(
+  //         (geoPosition) => {
+  //           const coords = {
+  //             latitude: geoPosition.coords.latitude,
+  //             longitude: geoPosition.coords.longitude,
+  //           };
+  //           setCurrentPosition(coords);
 
-          // push location to current url
-          const current = new URLSearchParams(searchParams);
+  //           // push location to current url
+  //           const current = new URLSearchParams(searchParams);
 
-          current.set("latitude", String(coords.latitude));
-          current.set("longitude", String(coords.longitude));
+  //           current.set("latitude", String(coords.latitude));
+  //           current.set("longitude", String(coords.longitude));
 
-          const search = current.toString();
-          const query = search ? `?${search}` : "";
+  //           const search = current.toString();
+  //           const query = search ? `?${search}` : "";
 
-          router.push(`${pathname}${query}`);
-        },
-        (error) => {
-          console.error("Error getting geolocation:", error.message);
-        }
-      );
-    } else {
-      console.error("Geolocation is not supported by your browser.");
-    }
-  }, [router, pathname, searchParams]);
+  //           router.push(`${pathname}${query}`);
+  //         },
+  //         (error) => {
+  //           console.error("Error getting geolocation:", error.message);
+  //         }
+  //       );
+  //     } else {
+  //       console.error("Geolocation is not supported by your browser.");
+  //     }
+  //   }, [router, pathname, searchParams]);
 
   // Get users that in current map area
-  useEffect(() => {
-    let moveTimeout: NodeJS.Timeout;
 
-    if (map) {
-      const onMove = () => {
-        // Clear the previous timeout if it exists
-        clearTimeout(moveTimeout);
+  function NearbyUsersLocationMaker() {
+    const [usersInBounds, setUsersInBounds] = useState<
+      [MongoDBUserData] | null
+    >();
+    const map = useMap();
 
-        // Set a new timeout
-        moveTimeout = setTimeout(() => {
-          // get users in current map area
-          fetchUsersInBounds(map.getBounds()).then((users) => {
-            setUsersInBounds(users);
-          });
-        }, 800); // Adjust the delay time as needed
-      };
+    // delay fetching users in bounds
+    useEffect(() => {
+      let moveTimeout: NodeJS.Timeout;
 
-      map.on("move", onMove);
-      return () => {
-        map.off("move", onMove);
-      };
-    }
-  }, [map]);
+      if (map) {
+        const onMove = () => {
+          // Clear the previous timeout if it exists
+          clearTimeout(moveTimeout);
 
-  // Update map view when user's location changes
-  useEffect(() => {
-    if (map) {
-      map.setView(
-        [currentPosition.latitude, currentPosition.longitude],
-        map.getZoom()
-      );
-    }
-  }, [map, currentPosition]);
+          // Set a new timeout
+          moveTimeout = setTimeout(() => {
+            // get users in current map area
+            fetchUsersInBounds(map.getBounds()).then((users) => {
+              setUsersInBounds(users);
+            });
+          }, 800); // Adjust the delay time as needed
+        };
 
-  const handleMarkerClick = (user: MongoDBUserData) => {
-    // Set the selected user when a marker is clicked
-    setSelectedUser(user);
-  };
+        map.on("move", onMove);
+        return () => {
+          map.off("move", onMove);
+        };
+      }
+    }, [map]);
 
-  // mix-blend-hard-light,mix-blend-lighten
-  return (
-    <MapContainer
-      className="h-full w-full z-0 transition-all duration-700 mask-image-my shadow-md sm:aspect-auto      hover:shadow-2xl  "
-      center={[currentPosition.latitude, currentPosition.longitude]}
-      zoom={13}
-      scrollWheelZoom={true}
-      // @ts-ignore
-      ref={setMap}
-    >
-      <TileLayer
-        // attribution="Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ"
-        url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
-        maxZoom={16}
-      />
-      <MarkerClusterGroup chunkedLoading>
+    const usersInBoundsMarkers = usersInBounds?.map((user) => {
+      return (
         <Marker
-          position={[currentPosition.latitude, currentPosition.longitude]}
+          position={[
+            user.location.coordinates[1],
+            user.location.coordinates[0],
+          ]}
           icon={icon}
+          key={user._id}
+          eventHandlers={{
+            click: () => setSelectedUser(user),
+          }}
         >
-          <Popup>Your location</Popup>
+          <Popup>Someone</Popup>
         </Marker>
-        {usersInBounds
-          ? usersInBounds.map((user: MongoDBUserData) => {
-              return (
-                <Marker
-                  position={[
-                    user.location.coordinates[1],
-                    user.location.coordinates[0],
-                  ]}
-                  icon={icon}
-                  key={user._id}
-                  eventHandlers={{
-                    click: () => handleMarkerClick(user),
-                  }}
-                >
-                  <Popup>Someone</Popup>
-                </Marker>
-              );
-            })
-          : null}
-      </MarkerClusterGroup>
-    </MapContainer>
+      );
+    });
+
+    return usersInBounds ? usersInBoundsMarkers : null;
+  }
+
+  function CurrentLocationMarker() {
+    const [position, setPosition] = useState<L.LatLng | null>(null);
+
+    const map = useMap();
+
+    useEffect(() => {
+      //   console.log("map updated");
+      map.locate().on("locationfound", function (e) {
+        setPosition(e.latlng);
+        map.flyTo(e.latlng, map.getZoom());
+      });
+    }, [map]);
+
+    return position === null ? null : (
+      <Marker
+        position={position}
+        icon={icon}
+        eventHandlers={{
+          click: () => setSelectedUser(null),
+        }}
+      >
+        <Popup>You are here</Popup>
+      </Marker>
+    );
+  }
+
+  const displayMap = useMemo(
+    () => (
+      <MapContainer
+        className="h-full w-full z-0 transition-all duration-700 mask-image-my shadow-md sm:aspect-auto      hover:shadow-2xl  "
+        center={[40.116421, -88.243385]}
+        zoom={13}
+        scrollWheelZoom={true}
+      >
+        <TileLayer
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+          maxZoom={16}
+        />
+
+        <MarkerClusterGroup chunkedLoading>
+          <CurrentLocationMarker />
+          <NearbyUsersLocationMaker />
+        </MarkerClusterGroup>
+      </MapContainer>
+    ),
+    []
   );
+  // mix-blend-hard-light,mix-blend-lighten
+  return displayMap;
 }
 
 export default MyMap;
