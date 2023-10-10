@@ -1,3 +1,4 @@
+import Body from "./Components/Body";
 import { Footer } from "./Components/Footer";
 import { Header } from "./Components/Header";
 import Map from "./Components/Map";
@@ -16,7 +17,6 @@ export default async function Home({
   searchParams: { [key: string]: string | undefined };
 }) {
   let currentSpotifyCode = searchParams?.code ?? "";
-
   let latitude = searchParams?.latitude ?? "";
   let longitude = searchParams?.longitude ?? "";
   let location = {
@@ -62,21 +62,22 @@ export default async function Home({
         background-animate "
     >
       <Header currentUser={profile.display_name}></Header>
+      <Body></Body>
 
-      <section className="mb-auto h-full w-full flex flex-col items-center justify-normal">
+      {/* <section className="mb-auto h-full w-full flex flex-col items-center justify-normal">
         <section
           className="relative h-[60vh]  w-full flex items-center justify-center"
           id="homepage-map"
         >
           <Map></Map>
         </section>
-        {/* TODO: add a welcome sentence  */}
+
         <section className="w-full h-full" id="homepage-my-songs">
           {currentSpotifyCode ? (
             <TopSongs topTracks={topTracks.items}></TopSongs>
           ) : null}
         </section>
-      </section>
+      </section> */}
 
       <Footer></Footer>
     </main>

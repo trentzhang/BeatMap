@@ -2,7 +2,7 @@ import Image from "next/image";
 import PlayButton from "./PlayButton";
 import { topTracksDefault } from "@/app/Utils/DefaultVariables";
 
-export const SpotifyCard = ({ topTrack = topTracksDefault.items[0] }) => {
+export const SpotifyCard = ({ topTrack }: { topTrack: Track }) => {
   return (
     <div className="bg-gray-900 shadow-lg rounded p-3 z-0 flex flex-col">
       <div className="group relative">

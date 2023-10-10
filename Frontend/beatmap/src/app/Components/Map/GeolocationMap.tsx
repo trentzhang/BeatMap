@@ -1,11 +1,12 @@
 "use client";
 // Map.tsx
-import L, { LatLngBounds, Map } from "leaflet";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import L, { Map } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { createContext, useEffect, useState } from "react";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
+import { useUserContext } from "../SelectedUserContext";
 
 const icon = L.icon({ iconUrl: "/marker-icon.png" });
 
@@ -34,6 +35,7 @@ const fetchUsersInBounds = async (bounds: any) => {
     console.error("Error fetching users:", error);
   }
 };
+
 function MyMap() {
   const [currentPosition, setCurrentPosition] = useState({
     latitude: 40.116421,
@@ -45,6 +47,7 @@ function MyMap() {
 
   const [map, setMap] = useState<Map>();
   const [usersInBounds, setUsersInBounds] = useState([]);
+  const { selectedUser, setSelectedUser } = useUserContext();
 
   // Get user's current location and update url
   useEffect(() => {
@@ -102,6 +105,7 @@ function MyMap() {
     }
   }, [map]);
 
+  // Update map view when user's location changes
   useEffect(() => {
     if (map) {
       map.setView(
@@ -110,6 +114,11 @@ function MyMap() {
       );
     }
   }, [map, currentPosition]);
+
+  const handleMarkerClick = (user: MongoDBUserData) => {
+    // Set the selected user when a marker is clicked
+    setSelectedUser(user);
+  };
 
   // mix-blend-hard-light,mix-blend-lighten
   return (
@@ -143,6 +152,9 @@ function MyMap() {
                   ]}
                   icon={icon}
                   key={user._id}
+                  eventHandlers={{
+                    click: () => handleMarkerClick(user),
+                  }}
                 >
                   <Popup>Someone</Popup>
                 </Marker>
