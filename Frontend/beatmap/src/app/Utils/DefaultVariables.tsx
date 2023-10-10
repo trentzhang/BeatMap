@@ -24,6 +24,7 @@ export const profileDefault = {
     total: 0,
   },
 };
+
 export const topTracksDefault = {
   items: [
     {

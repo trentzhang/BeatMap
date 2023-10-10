@@ -5,9 +5,35 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import MarkerClusterGroup from "react-leaflet-cluster";
 
 const icon = L.icon({ iconUrl: "/marker-icon.png" });
 
+// Assuming you have a function to convert bounds to a query string
+const boundsToQueryString = (bounds: any) => {
+  const { _southWest, _northEast } = bounds;
+  return `?southwest=${JSON.stringify([
+    _southWest.lng,
+    _southWest.lat,
+  ])}&northeast=${JSON.stringify([_northEast.lng, _northEast.lat])}`;
+};
+
+const fetchUsersInBounds = async (bounds: any) => {
+  try {
+    const queryString = boundsToQueryString(bounds);
+    const response = await fetch(`/api/nearbyUser${queryString}`);
+    if (response.ok) {
+      const users = await response.json();
+      // Do something with the users
+      console.log("Users in bounds:", users);
+      return users;
+    } else {
+      console.error("Error fetching users:", response.status);
+    }
+  } catch (error) {
+    console.error("Error fetching users:", error);
+  }
+};
 function MyMap() {
   const [currentPosition, setCurrentPosition] = useState({
     latitude: 40.116421,
@@ -18,9 +44,9 @@ function MyMap() {
   const searchParams = useSearchParams();
 
   const [map, setMap] = useState<Map>();
-  const [bounds, setBounds] = useState<LatLngBounds>();
+  const [usersInBounds, setUsersInBounds] = useState([]);
 
-  // Get user's current location using Geolocation API
+  // Get user's current location and update url
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -62,9 +88,11 @@ function MyMap() {
 
         // Set a new timeout
         moveTimeout = setTimeout(() => {
-          setBounds(map.getBounds());
-          console.log("bounds :>> ", map.getBounds());
-        }, 1000); // Adjust the delay time as needed
+          // get users in current map area
+          fetchUsersInBounds(map.getBounds()).then((users) => {
+            setUsersInBounds(users);
+          });
+        }, 800); // Adjust the delay time as needed
       };
 
       map.on("move", onMove);
@@ -93,21 +121,35 @@ function MyMap() {
       // @ts-ignore
       ref={setMap}
     >
-      {/* <UpdateMapCenter /> */}
-      {/* <FetchNearByUser></FetchNearByUser> */}
       <TileLayer
         // attribution="Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ"
         url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
         maxZoom={16}
       />
-      <Marker
-        position={[currentPosition.latitude, currentPosition.longitude]}
-        icon={icon}
-      >
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
-      </Marker>
+      <MarkerClusterGroup chunkedLoading>
+        <Marker
+          position={[currentPosition.latitude, currentPosition.longitude]}
+          icon={icon}
+        >
+          <Popup>Your location</Popup>
+        </Marker>
+        {usersInBounds
+          ? usersInBounds.map((user: MongoDBUserData) => {
+              return (
+                <Marker
+                  position={[
+                    user.location.coordinates[1],
+                    user.location.coordinates[0],
+                  ]}
+                  icon={icon}
+                  key={user._id}
+                >
+                  <Popup>Someone</Popup>
+                </Marker>
+              );
+            })
+          : null}
+      </MarkerClusterGroup>
     </MapContainer>
   );
 }
