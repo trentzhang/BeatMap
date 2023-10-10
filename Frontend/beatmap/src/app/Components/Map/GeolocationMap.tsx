@@ -44,44 +44,21 @@ const fetchUsersInBounds = async (bounds: any) => {
 };
 
 function MyMap() {
-  //   const router = useRouter();
-  //   const pathname = usePathname();
-  //   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  function pushLocation(coords: L.LatLng) {
+    // push location to current url
+    const current = new URLSearchParams(searchParams);
+    current.set("latitude", String(coords.lat));
+    current.set("longitude", String(coords.lng));
+    const search = current.toString();
+    const query = search ? `?${search}` : "";
+    router.push(`${pathname}${query}`);
+  }
 
   const { selectedUser, setSelectedUser } = useUserContext();
-
-  // Get user's current location and update url
-  //   useEffect(() => {
-  //     if ("geolocation" in navigator) {
-  //       navigator.geolocation.getCurrentPosition(
-  //         (geoPosition) => {
-  //           const coords = {
-  //             latitude: geoPosition.coords.latitude,
-  //             longitude: geoPosition.coords.longitude,
-  //           };
-  //           setCurrentPosition(coords);
-
-  //           // push location to current url
-  //           const current = new URLSearchParams(searchParams);
-
-  //           current.set("latitude", String(coords.latitude));
-  //           current.set("longitude", String(coords.longitude));
-
-  //           const search = current.toString();
-  //           const query = search ? `?${search}` : "";
-
-  //           router.push(`${pathname}${query}`);
-  //         },
-  //         (error) => {
-  //           console.error("Error getting geolocation:", error.message);
-  //         }
-  //       );
-  //     } else {
-  //       console.error("Geolocation is not supported by your browser.");
-  //     }
-  //   }, [router, pathname, searchParams]);
-
-  // Get users that in current map area
 
   function NearbyUsersLocationMaker() {
     const [usersInBounds, setUsersInBounds] = useState<
@@ -141,8 +118,8 @@ function MyMap() {
     const map = useMap();
 
     useEffect(() => {
-      //   console.log("map updated");
       map.locate().on("locationfound", function (e) {
+        pushLocation(e.latlng);
         setPosition(e.latlng);
         map.flyTo(e.latlng, map.getZoom());
       });
