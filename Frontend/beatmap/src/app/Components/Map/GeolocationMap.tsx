@@ -123,7 +123,7 @@ function MyMap() {
   // mix-blend-hard-light,mix-blend-lighten
   return (
     <MapContainer
-      className="aspect-square w-full z-0 transition-all duration-700 mask-image-my shadow-md sm:aspect-auto sm:h-full     hover:shadow-2xl  "
+      className="h-full w-full z-0 transition-all duration-700 mask-image-my shadow-md sm:aspect-auto      hover:shadow-2xl  "
       center={[currentPosition.latitude, currentPosition.longitude]}
       zoom={13}
       scrollWheelZoom={true}

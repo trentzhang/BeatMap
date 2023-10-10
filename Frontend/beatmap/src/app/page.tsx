@@ -63,22 +63,6 @@ export default async function Home({
     >
       <Header currentUser={profile.display_name}></Header>
       <Body></Body>
-
-      {/* <section className="mb-auto h-full w-full flex flex-col items-center justify-normal">
-        <section
-          className="relative h-[60vh]  w-full flex items-center justify-center"
-          id="homepage-map"
-        >
-          <Map></Map>
-        </section>
-
-        <section className="w-full h-full" id="homepage-my-songs">
-          {currentSpotifyCode ? (
-            <TopSongs topTracks={topTracks.items}></TopSongs>
-          ) : null}
-        </section>
-      </section> */}
-
       <Footer></Footer>
     </main>
   );

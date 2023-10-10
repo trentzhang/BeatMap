@@ -3,7 +3,7 @@ import { Card, CardBody } from "@nextui-org/react";
 import { useUserContext } from "../SelectedUserContext";
 import { SpotifyCard } from "./TrackCard";
 import { AnimatePresence, motion } from "framer-motion";
-
+import { ScrollShadow } from "@nextui-org/react";
 export default function MusicComponent() {
   const { selectedUser, setSelectedUser } = useUserContext();
   const topTracks = selectedUser?.topTracks || null;
@@ -15,16 +15,22 @@ export default function MusicComponent() {
       transition={{ duration: 0.15 }}
       key={selectedUser?._id}
     >
-      <Card className="mx-5 min-h-[40em] bg-gradient-to-b from-blue-600 to-slate-500">
+      <Card className="m-5 min-h-[40em] max-h-[calc(100vh-200px)] bg-gradient-to-b from-blue-600 to-slate-500">
         <CardBody>
           <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-300  mb-5">
             Top 50 Songs
           </h1>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {topTracks?.items?.map((topTrack) => (
-              <SpotifyCard topTrack={topTrack} key={topTrack.id}></SpotifyCard>
-            ))}
-          </div>
+
+          <ScrollShadow hideScrollBar className="w-full h-full">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {topTracks?.items?.map((topTrack) => (
+                <SpotifyCard
+                  topTrack={topTrack}
+                  key={topTrack.id}
+                ></SpotifyCard>
+              ))}
+            </div>
+          </ScrollShadow>
         </CardBody>
       </Card>
     </motion.div>

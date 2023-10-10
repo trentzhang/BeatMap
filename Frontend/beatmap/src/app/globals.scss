@@ -1,7 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+body {
+  overflow-y: scroll;
+}
 .background-animate {
   background-size: auto 220%;
 
