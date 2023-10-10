@@ -12,7 +12,7 @@ export default function MusicComponent() {
       initial={{ opacity: 0, y: "5%" }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: "5%" }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.15 }}
       key={selectedUser?._id}
     >
       <Card className="mx-5 min-h-[40em] bg-gradient-to-b from-blue-600 to-slate-500">
