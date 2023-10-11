@@ -1,10 +1,23 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { currentlyPlayingContext } from "./CardsGroup";
 
 const PlayButton = ({ preview_url }: { preview_url: string }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const { currentlyPlaying, setCurrentlyPlaying } = useContext(
+    currentlyPlayingContext
+  );
+
+  useEffect(() => {
+    if (isPlaying && currentlyPlaying !== preview_url) {
+      const audio = audioRef.current;
+      audio?.pause();
+      setIsPlaying(false);
+    }
+  }, [currentlyPlaying, preview_url, isPlaying]);
+
   const toggleAudio = () => {
     const audio = audioRef.current;
 
@@ -12,12 +25,24 @@ const PlayButton = ({ preview_url }: { preview_url: string }) => {
       if (isPlaying) {
         audio.pause();
       } else {
+        // pauseAllAudio();
         audio.play();
+        setCurrentlyPlaying(preview_url);
       }
     }
 
     setIsPlaying(!isPlaying);
   };
+
+  const pauseAllAudio = () => {
+    document.querySelectorAll("audio").forEach((audio: HTMLAudioElement) => {
+      if (!audio.paused) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    });
+  };
+
   return (
     <button
       className="hover:scale-110 text-white opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition"

@@ -5,11 +5,15 @@ import { SpotifyCard } from "./TrackCard";
 import { AnimatePresence, motion } from "framer-motion";
 import { ScrollShadow } from "@nextui-org/react";
 import useSWR from "swr";
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
+
+export const currentlyPlayingContext = createContext<any>(undefined);
 
 export default function MusicComponent() {
   const { selectedUser, setSelectedUser } = useUserContext();
   const topTracks = selectedUser?.topTracks || null;
+
+  const [currentlyPlaying, setCurrentlyPlaying] = useState<string | null>(null);
 
   // alternative to call user api each time user is selected, but it's slower than getting all nearby users at once
   //   const fetcher = (url: string) =>
@@ -65,7 +69,11 @@ export default function MusicComponent() {
         transition={{ duration: 0.15 }}
         key={selectedUser?._id}
       >
-        {selectedUser ? MyCard : NothingHereCard}
+        <currentlyPlayingContext.Provider
+          value={{ currentlyPlaying, setCurrentlyPlaying }}
+        >
+          {selectedUser ? MyCard : NothingHereCard}
+        </currentlyPlayingContext.Provider>
       </motion.div>
     </AnimatePresence>
   );
