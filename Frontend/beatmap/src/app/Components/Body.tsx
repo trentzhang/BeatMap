@@ -9,7 +9,12 @@ import { Header } from "./Header";
 import { Footer } from "./Footer";
 export default function Body({ currentUser = "" }) {
   return (
-    <div>
+    <div
+      className="flex min-h-screen flex-col 
+        items-center justify-normal   
+        bg-gradient-to-t from-slate-600 via-slate-300  
+        background-animate "
+    >
       <Header currentUser={currentUser}></Header>
       <UserProvider>
         <section className="mb-auto h-full w-full flex flex-col items-center justify-center">

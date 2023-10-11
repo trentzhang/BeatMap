@@ -52,12 +52,7 @@ export default async function Home({
   //   console.log("topTracks :>> ", topTracks.items[0]);
 
   return (
-    <main
-      className="flex min-h-screen flex-col 
-        items-center justify-normal   
-        bg-gradient-to-t from-slate-600 via-slate-300  
-        background-animate "
-    >
+    <main>
       <Body currentUser={profile.display_name}></Body>
     </main>
   );
