@@ -63,14 +63,22 @@ function MyMap() {
 
   const { selectedUser, setSelectedUser } = useUserContext();
 
-  function NearbyUsersLocationMaker() {
+  function LocationMarkers() {
+    const [position, setPosition] = useState<L.LatLng | null>(null);
     const [usersInBounds, setUsersInBounds] = useState<
       [MongoDBUserData] | null
     >();
+
     const map = useMap();
 
-    // delay fetching users in bounds
     useEffect(() => {
+      map.locate().on("locationfound", function (e) {
+        pushLocation(e.latlng);
+        setPosition(e.latlng);
+        map.flyTo(e.latlng, map.getZoom());
+      });
+
+      // delay fetching users in bounds
       let moveTimeout: NodeJS.Timeout;
 
       if (map) {
@@ -94,71 +102,43 @@ function MyMap() {
       }
     }, [map]);
 
-    const usersInBoundsMarkers = usersInBounds?.map((user) => {
+    const MyMarker = ({ position }: MyMarker) => {
       return (
         <Marker
-          position={[
-            user.location.coordinates[1],
-            user.location.coordinates[0],
-          ]}
+          position={position}
           icon={icon}
-          key={user._id}
           eventHandlers={{
-            click: () => setSelectedUser(user),
+            click: () => setSelectedUser(null),
           }}
         >
-          <Popup>Someone</Popup>
+          <Popup>You are here</Popup>
         </Marker>
+      );
+    };
+
+    const usersInBoundsMarkers = usersInBounds?.map((user) => {
+      return (
+        <MyMarker
+          position={L.latLng(
+            user.location.coordinates[1],
+            user.location.coordinates[0]
+          )}
+          key={user._id}
+        ></MyMarker>
       );
     });
 
-    return usersInBounds ? usersInBoundsMarkers : null;
-  }
+    const currentMaker = position ? (
+      <MyMarker position={position} key="Current Location Maker"></MyMarker>
+    ) : null;
 
-  function CurrentLocationMarker() {
-    const [position, setPosition] = useState<L.LatLng | null>(null);
-
-    const map = useMap();
-
-    useEffect(() => {
-      map.locate().on("locationfound", function (e) {
-        pushLocation(e.latlng);
-        setPosition(e.latlng);
-        map.flyTo(e.latlng, map.getZoom());
-      });
-    }, [map]);
-
-    return position === null ? null : (
-      <Marker
-        position={position}
-        icon={icon}
-        eventHandlers={{
-          click: () => setSelectedUser(null),
-        }}
-      >
-        <Popup>You are here</Popup>
-      </Marker>
+    return (
+      <>
+        {usersInBoundsMarkers}
+        {currentMaker}
+      </>
     );
   }
-
-  function SetViewOnClick() {
-    const map = useMapEvent("click", (e) => {
-      map.setView(e.latlng, map.getZoom(), {
-        animate: true,
-      });
-    });
-
-    return null;
-  }
-  //   function SetViewOnDoubleClick() {
-  //     const map = useMapEvent("dblclick", (e) => {
-  //       map.setView(e.latlng, 2, {
-  //         animate: true,
-  //       });
-  //     });
-
-  //     return null;
-  //   }
 
   const displayMap = useMemo(
     () => (
@@ -174,13 +154,9 @@ function MyMap() {
           url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
           maxZoom={13}
         />
-
         <MarkerClusterGroup chunkedLoading animateAddingMarkers={true}>
-          <CurrentLocationMarker />
-          <NearbyUsersLocationMaker />
+          <LocationMarkers />
         </MarkerClusterGroup>
-        <SetViewOnClick />
-        {/* <SetViewOnDoubleClick /> */}
       </MapContainer>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps

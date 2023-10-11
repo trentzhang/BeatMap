@@ -106,3 +106,7 @@ interface MongoDBUserData {
   location: SpotifyLocation;
   updatedAt: string;
 }
+
+interface MyMarker {
+  position: L.LatLng;
+}
