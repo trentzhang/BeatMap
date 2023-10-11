@@ -72,16 +72,19 @@ function MyMap() {
     const map = useMap();
 
     useEffect(() => {
-      map.locate().on("locationfound", function (e) {
-        pushLocation(e.latlng);
-        setPosition(e.latlng);
-        map.flyTo(e.latlng, map.getZoom());
-      });
-
       // delay fetching users in bounds
       let moveTimeout: NodeJS.Timeout;
 
       if (map) {
+        function onLocationfound(e: any) {
+          console.log("e.latlng", e.latlng);
+          pushLocation(e.latlng);
+          setPosition(e.latlng);
+          map.flyTo(e.latlng, map.getZoom());
+        }
+        function onLocationerror(e: any) {
+          console.log(e);
+        }
         const onMove = () => {
           // Clear the previous timeout if it exists
           clearTimeout(moveTimeout);
@@ -94,24 +97,30 @@ function MyMap() {
             });
           }, 800); // Adjust the delay time as needed
         };
+        const actions = {
+          move: onMove,
+          locationfound: onLocationfound,
+          locationerror: onLocationerror,
+        };
+        map.locate();
 
-        map.on("move", onMove);
+        map.on(actions);
         return () => {
-          map.off("move", onMove);
+          map.off(actions);
         };
       }
     }, [map]);
 
-    const MyMarker = ({ position }: MyMarker) => {
+    const MyMarker = ({ position, seletedUser }: MyMarker) => {
       return (
         <Marker
           position={position}
           icon={icon}
           eventHandlers={{
-            click: () => setSelectedUser(null),
+            click: () => setSelectedUser(seletedUser),
           }}
         >
-          <Popup>You are here</Popup>
+          {/* <Popup>You are here</Popup> */}
         </Marker>
       );
     };
@@ -123,13 +132,18 @@ function MyMap() {
             user.location.coordinates[1],
             user.location.coordinates[0]
           )}
+          seletedUser={user}
           key={user._id}
         ></MyMarker>
       );
     });
 
     const currentMaker = position ? (
-      <MyMarker position={position} key="Current Location Maker"></MyMarker>
+      <MyMarker
+        position={position}
+        seletedUser={null}
+        key="Current Location Maker"
+      ></MyMarker>
     ) : null;
 
     return (

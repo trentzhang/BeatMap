@@ -109,4 +109,5 @@ interface MongoDBUserData {
 
 interface MyMarker {
   position: L.LatLng;
+  seletedUser: MongoDBUserData | null;
 }
