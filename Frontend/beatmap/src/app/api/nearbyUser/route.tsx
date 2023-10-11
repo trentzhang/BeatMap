@@ -21,7 +21,8 @@ export async function GET(request: NextRequest) {
         },
       },
     };
-    users = await collection.find(query).limit(10).toArray();
+    const select = { authorizationInfo: 0 };
+    users = await collection.find(query).project(select).limit(10).toArray();
   } catch (error) {
     return new Response("Error!", {
       status: 500,

@@ -1,15 +1,12 @@
 import Body from "./Components/Body";
 import { Footer } from "./Components/Footer";
 import { Header } from "./Components/Header";
-import Map from "./Components/Map";
-
-import TopSongs from "./Components/SpotifyTrackCardsGroup/CardsGroup";
 import { profileDefault, topTracksDefault } from "./Utils/DefaultVariables";
 import { post2MongoDB } from "./Utils/MongoDB/addUserData";
 import { spotifyCode2Token } from "./Utils/SpotifyAPIs/code2Token";
 import { getProfile } from "./Utils/SpotifyAPIs/getProfile";
 import { getTopTracks } from "./Utils/SpotifyAPIs/getTopTracks";
-
+import { cookies } from "next/headers";
 // export const dynamic = "force-dynamic";
 export default async function Home({
   searchParams,
@@ -26,6 +23,8 @@ export default async function Home({
 
   let topTracks = topTracksDefault;
   let profile = profileDefault;
+
+  const cookieStore = cookies();
 
   if (currentSpotifyCode) {
     try {

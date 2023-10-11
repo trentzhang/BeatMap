@@ -10,6 +10,7 @@ import {
   Popup,
   TileLayer,
   useMap,
+  useMapEvent,
   useMapEvents,
 } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
@@ -138,6 +139,16 @@ function MyMap() {
     );
   }
 
+  function SetViewOnClick() {
+    const map = useMapEvent("click", (e) => {
+      map.setView(e.latlng, map.getZoom(), {
+        animate: true,
+      });
+    });
+
+    return null;
+  }
+
   const displayMap = useMemo(
     () => (
       <MapContainer
@@ -155,8 +166,10 @@ function MyMap() {
           <CurrentLocationMarker />
           <NearbyUsersLocationMaker />
         </MarkerClusterGroup>
+        <SetViewOnClick />
       </MapContainer>
     ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
   // mix-blend-hard-light,mix-blend-lighten

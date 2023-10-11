@@ -28,7 +28,7 @@ export default function MusicComponent() {
     <Card className="m-5 min-h-[40em] max-h-[calc(100vh-200px)] bg-gradient-to-b from-blue-600 to-sky-600">
       <CardBody className="flex items-center justify-evenly">
         <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-300  mb-5">
-          Connect to Spotify to see your music here
+          Connect to Spotify to upload your music
         </h1>
         <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-300  mb-5">
           Select a user to see their top tracks
