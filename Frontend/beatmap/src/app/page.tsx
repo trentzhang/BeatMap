@@ -43,6 +43,17 @@ export default async function Home({
           longitude
         ) {
           post2MongoDB(authorizationInfo, topTracks, profile, location);
+          console.log(
+            profile.display_name,
+            "Successfully updated data to MongoDB"
+          );
+        } else {
+          console.log(profile.display_name, "Did not upload", [
+            authorizationInfo,
+            profile,
+            latitude,
+            longitude,
+          ]);
         }
       }
     } catch (error) {
