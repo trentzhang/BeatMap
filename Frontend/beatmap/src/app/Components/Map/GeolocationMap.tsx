@@ -31,6 +31,8 @@ const fetchUsersInBounds = async (bounds: any) => {
   try {
     const queryString = boundsToQueryString(bounds);
     const response = await fetch(`/api/nearbyUser${queryString}`);
+    // alternative to call user api each time user is selected, but it's slower than getting all nearby users at once
+    // const response = await fetch(`/api/get/nearby/user${queryString}`);
     if (response.ok) {
       const users = await response.json();
       // Do something with the users
