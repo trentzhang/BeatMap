@@ -150,18 +150,28 @@ function MyMap() {
 
     return null;
   }
+  //   function SetViewOnDoubleClick() {
+  //     const map = useMapEvent("dblclick", (e) => {
+  //       map.setView(e.latlng, 2, {
+  //         animate: true,
+  //       });
+  //     });
+
+  //     return null;
+  //   }
 
   const displayMap = useMemo(
     () => (
       <MapContainer
         className="h-full w-full z-0 transition-all duration-700 mask-image-my shadow-md sm:aspect-auto      hover:shadow-2xl  "
         center={[40.116421, -88.243385]}
-        zoom={13}
-        scrollWheelZoom={true}
+        zoom={3}
+        // wheelPxPerZoomLevel={12}
+        zoomDelta={5}
       >
         <TileLayer
           url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
-          maxZoom={16}
+          maxZoom={13}
         />
 
         <MarkerClusterGroup chunkedLoading animateAddingMarkers={true}>
@@ -169,6 +179,7 @@ function MyMap() {
           <NearbyUsersLocationMaker />
         </MarkerClusterGroup>
         <SetViewOnClick />
+        {/* <SetViewOnDoubleClick /> */}
       </MapContainer>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
