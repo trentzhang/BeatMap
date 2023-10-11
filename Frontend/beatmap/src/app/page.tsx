@@ -58,9 +58,7 @@ export default async function Home({
         bg-gradient-to-t from-slate-600 via-slate-300  
         background-animate "
     >
-      <Header currentUser={profile.display_name}></Header>
-      <Body></Body>
-      <Footer></Footer>
+      <Body currentUser={profile.display_name}></Body>
     </main>
   );
 }
