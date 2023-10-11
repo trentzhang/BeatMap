@@ -41,6 +41,7 @@ const PlayButton = ({ preview_url }: { preview_url: string }) => {
       onClick={toggleAudio}
     >
       {isPlaying ? <StopIcon /> : <PlayIcon />}
+      {/* TODO Bug when load too many times: :3000/?latitude=40.110719&longitude=-88.2125603:1 [Intervention] Blocked attempt to create a WebMediaPlayer as there are too many WebMediaPlayers already in existence. See crbug.com/1144736#c27*/}
       <audio ref={audioRef} src={preview_url} />
     </button>
   );

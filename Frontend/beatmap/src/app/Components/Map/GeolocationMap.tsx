@@ -16,7 +16,7 @@ import {
 import MarkerClusterGroup from "react-leaflet-cluster";
 import { useUserContext } from "../SelectedUserContext";
 
-const icon = L.icon({ iconUrl: "/marker-icon.png" });
+const icon = L.icon({ iconUrl: "/marker-icon.png", iconSize: [20, 35] });
 
 // Assuming you have a function to convert bounds to a query string
 const boundsToQueryString = (bounds: any) => {
@@ -164,7 +164,7 @@ function MyMap() {
           maxZoom={16}
         />
 
-        <MarkerClusterGroup chunkedLoading>
+        <MarkerClusterGroup chunkedLoading animateAddingMarkers={true}>
           <CurrentLocationMarker />
           <NearbyUsersLocationMaker />
         </MarkerClusterGroup>

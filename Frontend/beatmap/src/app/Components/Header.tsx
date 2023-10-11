@@ -27,8 +27,6 @@ export const Header = ({ currentUser = "" }) => {
     };
   }, []);
 
-  useEffect(() => {}, [scrollPosition]);
-
   return (
     <Navbar className="backdrop-blur-lg">
       <NavbarBrand>
