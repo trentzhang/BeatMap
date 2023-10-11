@@ -7,7 +7,13 @@ import { useEffect, useState } from "react";
 import { UserProvider } from "./SelectedUserContext";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
-export default function Body({ currentUser = "" }) {
+export default function Body({
+  name,
+  topTracks,
+}: {
+  name: string;
+  topTracks: TopTracks;
+}) {
   return (
     <div
       className="flex min-h-screen flex-col 
@@ -15,7 +21,7 @@ export default function Body({ currentUser = "" }) {
         bg-gradient-to-t from-slate-600 via-slate-300  
         background-animate "
     >
-      <Header currentUser={currentUser}></Header>
+      <Header currentUser={name}></Header>
       <UserProvider>
         <section className="mb-auto h-full w-full flex flex-col items-center justify-center">
           <motion.div
@@ -27,7 +33,7 @@ export default function Body({ currentUser = "" }) {
 
           <section>
             <motion.div className="w-full h-full" id="homepage-my-songs">
-              <TopSongs></TopSongs>
+              <TopSongs loggedInUserTopTracks={topTracks}></TopSongs>
             </motion.div>
           </section>
         </section>

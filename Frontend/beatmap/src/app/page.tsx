@@ -21,8 +21,8 @@ export default async function Home({
     coordinates: [Number(longitude), Number(latitude)],
   };
 
-  let topTracks = topTracksDefault;
-  let profile = profileDefault;
+  let topTracks;
+  let profile;
 
   if (currentSpotifyCode) {
     try {
@@ -64,7 +64,7 @@ export default async function Home({
 
   return (
     <main>
-      <Body currentUser={profile.display_name}></Body>
+      <Body name={profile?.display_name} topTracks={topTracks}></Body>
     </main>
   );
 }

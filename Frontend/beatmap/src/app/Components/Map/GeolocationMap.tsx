@@ -167,6 +167,7 @@ function MyMap() {
         center={[40.116421, -88.243385]}
         zoom={3}
         // wheelPxPerZoomLevel={12}
+        doubleClickZoom={false}
         zoomDelta={5}
       >
         <TileLayer

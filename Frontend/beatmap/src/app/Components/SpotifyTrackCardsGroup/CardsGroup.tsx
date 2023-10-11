@@ -9,9 +9,13 @@ import { createContext, useContext, useState } from "react";
 
 export const currentlyPlayingContext = createContext<any>(undefined);
 
-export default function MusicComponent() {
+export default function MusicComponent({
+  loggedInUserTopTracks,
+}: {
+  loggedInUserTopTracks: TopTracks;
+}) {
   const { selectedUser, setSelectedUser } = useUserContext();
-  const topTracks = selectedUser?.topTracks || null;
+  const topTracks = selectedUser?.topTracks || loggedInUserTopTracks;
 
   const [currentlyPlaying, setCurrentlyPlaying] = useState<string | null>(null);
 
@@ -39,7 +43,7 @@ export default function MusicComponent() {
 
         <ScrollShadow hideScrollBar className="w-full h-full">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {selectedUser?.topTracks?.items?.map((topTrack) => (
+            {topTracks?.items?.map((topTrack) => (
               <SpotifyCard topTrack={topTrack} key={topTrack.id}></SpotifyCard>
             ))}
           </div>
@@ -72,7 +76,7 @@ export default function MusicComponent() {
         <currentlyPlayingContext.Provider
           value={{ currentlyPlaying, setCurrentlyPlaying }}
         >
-          {selectedUser ? MyCard : NothingHereCard}
+          {topTracks ? MyCard : NothingHereCard}
         </currentlyPlayingContext.Provider>
       </motion.div>
     </AnimatePresence>
