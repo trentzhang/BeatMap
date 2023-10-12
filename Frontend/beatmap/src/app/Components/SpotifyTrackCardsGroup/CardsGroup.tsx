@@ -1,6 +1,6 @@
 "use client";
 import { Card, CardBody, ScrollShadow } from "@nextui-org/react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, Variants, motion, useAnimation } from "framer-motion";
 import { createContext, useState } from "react";
 import { useUserContext } from "../SelectedUserContext";
 import { SpotifyCard } from "./TrackCard";
@@ -62,20 +62,34 @@ export default function MusicComponent({
     </Card>
   );
 
+  const [isToggled, setIsToggled] = useState(false);
+  const controls = useAnimation();
+
+  const handleTap = async () => {
+    setIsToggled(!isToggled);
+
+    // Animate to the desired y position based on the toggle state
+    await controls.start({
+      y: isToggled ? 0 : "-45%",
+      x: 0,
+    });
+  };
+
   return (
     <AnimatePresence mode="wait">
-      <motion.div
-        initial={{ opacity: 0, y: "5%" }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: "5%" }}
-        transition={{ duration: 0.15 }}
-        key={selectedUser?._id}
-      >
-        <currentlyPlayingContext.Provider
-          value={{ currentlyPlaying, setCurrentlyPlaying }}
+      <motion.div animate={controls} onTap={handleTap} key={selectedUser?._id}>
+        <motion.div
+          initial={{ x: "100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "100%" }}
+          //   transition={{ duration: 0.2 }}
         >
-          {topTracks ? MyCard : null}
-        </currentlyPlayingContext.Provider>
+          <currentlyPlayingContext.Provider
+            value={{ currentlyPlaying, setCurrentlyPlaying }}
+          >
+            {topTracks ? MyCard : null}
+          </currentlyPlayingContext.Provider>
+        </motion.div>
       </motion.div>
     </AnimatePresence>
   );
