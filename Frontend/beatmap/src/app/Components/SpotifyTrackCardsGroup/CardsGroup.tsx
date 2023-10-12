@@ -78,7 +78,7 @@ export default function MusicComponent({
 
     // Animate to the desired y position based on the toggle state
     await controls.start({
-      y: isToggled ? 0 : isMobile ? 0 : "-40vh",
+      y: isToggled ? 0 : isMobile ? 0 : "-45vh",
     });
   };
 
