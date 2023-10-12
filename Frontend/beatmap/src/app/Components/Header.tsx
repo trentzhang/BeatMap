@@ -30,7 +30,9 @@ export const Header = ({ currentUser = "" }) => {
   return (
     <Navbar className="backdrop-blur-lg">
       <NavbarBrand>
-        <p className="font-bold text-inherit">BeatMap</p>
+        <p className="font-bold text-inherit">
+          <a href="/"> BeatMap</a>
+        </p>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem isActive>

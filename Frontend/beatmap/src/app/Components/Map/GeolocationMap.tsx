@@ -18,6 +18,25 @@ import { useUserContext } from "../SelectedUserContext";
 
 const icon = L.icon({ iconUrl: "/marker-icon.png", iconSize: [20, 35] });
 
+function handlePermission() {
+  navigator.permissions.query({ name: "geolocation" }).then((result) => {
+    if (result.state === "granted") {
+      report(result.state);
+    } else if (result.state === "prompt") {
+      report(result.state);
+    } else if (result.state === "denied") {
+      report(result.state);
+    }
+    result.addEventListener("change", () => {
+      report(result.state);
+    });
+  });
+}
+
+function report(state: string) {
+  console.log(`Permission ${state}`);
+}
+
 // Assuming you have a function to convert bounds to a query string
 const boundsToQueryString = (bounds: any) => {
   const { _southWest, _northEast } = bounds;
@@ -77,15 +96,17 @@ function MyMap() {
 
       if (map) {
         function onLocationfound(e: any) {
+          onMove();
           console.log("e.latlng", e.latlng);
           pushLocation(e.latlng);
           setPosition(e.latlng);
           map.flyTo(e.latlng, map.getZoom());
         }
         function onLocationerror(e: any) {
+          onMove();
           console.log(e);
         }
-        const onMove = () => {
+        function onMove() {
           // Clear the previous timeout if it exists
           clearTimeout(moveTimeout);
 
@@ -96,7 +117,8 @@ function MyMap() {
               setUsersInBounds(users);
             });
           }, 800); // Adjust the delay time as needed
-        };
+        }
+
         const actions = {
           move: onMove,
           locationfound: onLocationfound,

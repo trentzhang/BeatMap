@@ -8,11 +8,9 @@ import { UserProvider } from "./SelectedUserContext";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 export default function Body({
-  name,
-  topTracks,
+  currentUser,
 }: {
-  name: string;
-  topTracks: TopTracks;
+  currentUser: Pick<MongoDBUserData, "profile" | "topTracks">;
 }) {
   return (
     <div
@@ -21,7 +19,7 @@ export default function Body({
         bg-gradient-to-t from-slate-600 via-slate-300  
         background-animate "
     >
-      <Header currentUser={name}></Header>
+      <Header currentUser={currentUser.profile?.display_name}></Header>
       <UserProvider>
         <section className="mb-auto h-full w-full flex flex-col items-center justify-center">
           <motion.div
@@ -33,7 +31,9 @@ export default function Body({
 
           <section>
             <motion.div className="w-full h-full" id="homepage-my-songs">
-              <TopSongs loggedInUserTopTracks={topTracks}></TopSongs>
+              <TopSongs
+                loggedInUserTopTracks={currentUser.topTracks}
+              ></TopSongs>
             </motion.div>
           </section>
         </section>

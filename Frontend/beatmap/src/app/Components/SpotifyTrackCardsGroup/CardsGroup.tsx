@@ -1,11 +1,9 @@
 "use client";
-import { Card, CardBody } from "@nextui-org/react";
+import { Card, CardBody, ScrollShadow } from "@nextui-org/react";
+import { AnimatePresence, motion } from "framer-motion";
+import { createContext, useState } from "react";
 import { useUserContext } from "../SelectedUserContext";
 import { SpotifyCard } from "./TrackCard";
-import { AnimatePresence, motion } from "framer-motion";
-import { ScrollShadow } from "@nextui-org/react";
-import useSWR from "swr";
-import { createContext, useContext, useState } from "react";
 
 export const currentlyPlayingContext = createContext<any>(undefined);
 
@@ -76,7 +74,7 @@ export default function MusicComponent({
         <currentlyPlayingContext.Provider
           value={{ currentlyPlaying, setCurrentlyPlaying }}
         >
-          {topTracks ? MyCard : NothingHereCard}
+          {topTracks ? MyCard : null}
         </currentlyPlayingContext.Provider>
       </motion.div>
     </AnimatePresence>

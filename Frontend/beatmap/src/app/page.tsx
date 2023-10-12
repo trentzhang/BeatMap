@@ -64,7 +64,7 @@ export default async function Home({
 
   return (
     <main>
-      <Body name={profile?.display_name} topTracks={topTracks}></Body>
+      <Body currentUser={{ profile: profile, topTracks: topTracks }}></Body>
     </main>
   );
 }
