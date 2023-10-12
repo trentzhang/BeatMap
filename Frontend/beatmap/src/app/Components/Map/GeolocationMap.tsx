@@ -1,41 +1,14 @@
 "use client";
 // Map.tsx
-import L, { Map } from "leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { createContext, useEffect, useMemo, useState } from "react";
-import {
-  MapContainer,
-  Marker,
-  Popup,
-  TileLayer,
-  useMap,
-  useMapEvent,
-  useMapEvents,
-} from "react-leaflet";
+import { useEffect, useMemo, useState } from "react";
+import { MapContainer, Marker, TileLayer, useMap } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import { useUserContext } from "../SelectedUserContext";
 
 const icon = L.icon({ iconUrl: "/marker-icon.png", iconSize: [20, 35] });
-
-function handlePermission() {
-  navigator.permissions.query({ name: "geolocation" }).then((result) => {
-    if (result.state === "granted") {
-      report(result.state);
-    } else if (result.state === "prompt") {
-      report(result.state);
-    } else if (result.state === "denied") {
-      report(result.state);
-    }
-    result.addEventListener("change", () => {
-      report(result.state);
-    });
-  });
-}
-
-function report(state: string) {
-  console.log(`Permission ${state}`);
-}
 
 // Assuming you have a function to convert bounds to a query string
 const boundsToQueryString = (bounds: any) => {
@@ -97,8 +70,10 @@ function MyMap() {
       if (map) {
         function onLocationfound(e: any) {
           onMove();
-          console.log("e.latlng", e.latlng);
           pushLocation(e.latlng);
+          // send current location to database if logged in
+
+          // fly to current location
           setPosition(e.latlng);
           map.flyTo(e.latlng, map.getZoom());
         }

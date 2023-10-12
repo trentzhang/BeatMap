@@ -18,7 +18,7 @@ export default async function Home({
   let longitude = searchParams?.longitude ?? "";
   let location = {
     type: "Point",
-    coordinates: [Number(longitude), Number(latitude)],
+    coordinates: [Number(longitude) ?? 0, Number(latitude) ?? 0],
   };
 
   let topTracks;
@@ -35,24 +35,12 @@ export default async function Home({
           getTopTracks(spotifyToken),
           getProfile(spotifyToken),
         ]);
-        if (
-          authorizationInfo &&
-          topTracks &&
-          profile &&
-          latitude &&
-          longitude
-        ) {
+        if (authorizationInfo && topTracks && profile) {
           post2MongoDB(authorizationInfo, topTracks, profile, location);
-          console.log(
-            profile.display_name,
-            "Successfully updated data to MongoDB"
-          );
         } else {
           console.log(profile.display_name, "Did not upload", [
             authorizationInfo,
             profile,
-            latitude,
-            longitude,
           ]);
         }
       }
