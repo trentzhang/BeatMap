@@ -75,7 +75,7 @@ function MyMap() {
 
           // fly to current location
           setPosition(e.latlng);
-          map.flyTo(e.latlng, map.getZoom());
+          map.flyTo(e.latlng, 13);
         }
         function onLocationerror(e: any) {
           onMove();
@@ -164,6 +164,7 @@ function MyMap() {
         <TileLayer
           url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
           maxZoom={13}
+          minZoom={2}
         />
         <MarkerClusterGroup chunkedLoading animateAddingMarkers={true}>
           <LocationMarkers />
