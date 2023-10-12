@@ -33,9 +33,9 @@ export default function MusicComponent({
   //   const [topTracks, setTopTracks] = useState([]);
 
   const MyCard = (
-    <Card className="m-5 min-h-[40em] max-h-[calc(100vh-200px)] bg-gradient-to-b from-blue-600 to-sky-600">
+    <Card className="m-5 h-[calc(100vh-200px)] bg-gradient-to-b from-blue-600 to-sky-600">
       <CardBody>
-        <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-300  mb-5">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-300  mb-5">
           Top 50 Songs
         </h1>
 
@@ -50,16 +50,22 @@ export default function MusicComponent({
     </Card>
   );
   const NothingHereCard = (
-    <Card className="m-5 min-h-[40em] max-h-[calc(100vh-200px)] bg-gradient-to-b from-blue-600 to-sky-600">
-      <CardBody className="flex items-center justify-evenly">
-        <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-300  mb-5">
-          Connect to Spotify to upload your music
-        </h1>
-        <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-300  mb-5">
-          Select a user to see their top tracks
-        </h1>
-      </CardBody>
-    </Card>
+    <div className="h-[calc(100vh-200px)]  ">
+      <Card className="m-5 bg-gradient-to-b from-blue-600 to-sky-600">
+        <CardBody>
+          <h1 className="text-sm sm:text-md md:text-lg font-bold text-gray-300  mb-5">
+            Connect to Spotify to upload your music
+          </h1>
+        </CardBody>
+      </Card>
+      <Card className="m-5 bg-gradient-to-b from-blue-600 to-sky-600">
+        <CardBody>
+          <h1 className="text-sm sm:text-md md:text-lg font-bold text-gray-300  mb-5">
+            Select a user to see their top tracks
+          </h1>
+        </CardBody>
+      </Card>
+    </div>
   );
 
   const [isToggled, setIsToggled] = useState(false);
@@ -68,26 +74,27 @@ export default function MusicComponent({
   const handleTap = async () => {
     setIsToggled(!isToggled);
 
+    const isMobile = window.innerWidth < 768;
+
     // Animate to the desired y position based on the toggle state
     await controls.start({
-      y: isToggled ? 0 : "-45%",
-      x: 0,
+      y: isToggled ? 0 : isMobile ? 0 : "-40vh",
     });
   };
 
   return (
     <AnimatePresence mode="wait">
-      <motion.div animate={controls} onTap={handleTap} key={selectedUser?._id}>
-        <motion.div
-          initial={{ x: "100%" }}
-          animate={{ x: 0 }}
-          exit={{ x: "100%" }}
-          //   transition={{ duration: 0.2 }}
-        >
+      <motion.div
+        initial={{ x: "100vw" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100vw" }}
+        key={selectedUser?._id}
+      >
+        <motion.div animate={controls} onTap={handleTap}>
           <currentlyPlayingContext.Provider
             value={{ currentlyPlaying, setCurrentlyPlaying }}
           >
-            {topTracks ? MyCard : null}
+            {topTracks ? MyCard : NothingHereCard}
           </currentlyPlayingContext.Provider>
         </motion.div>
       </motion.div>

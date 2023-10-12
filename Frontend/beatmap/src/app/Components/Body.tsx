@@ -16,14 +16,14 @@ export default function Body({
     <div
       className="flex min-h-screen flex-col 
         items-center justify-normal   
-        bg-gradient-to-t from-slate-600 via-slate-300  
-        background-animate "
+        bg-gradient-to-t from-slate-600 via-slate-300  background-animate 
+        no-scrollbar "
     >
       <Header currentUser={currentUser.profile?.display_name}></Header>
       <UserProvider>
         <section className="mb-auto h-full w-full flex flex-col items-center justify-center">
           <motion.div
-            className="relative h-[50vh] w-full flex items-center justify-center"
+            className="relative h-[40vh] md:h-[50vh] w-full flex items-center justify-center"
             id="homepage-map"
           >
             <Map></Map>
