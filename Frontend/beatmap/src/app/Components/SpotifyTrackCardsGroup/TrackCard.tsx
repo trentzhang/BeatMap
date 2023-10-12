@@ -4,7 +4,7 @@ import { topTracksDefault } from "@/app/Utils/DefaultVariables";
 
 export const SpotifyCard = ({ topTrack }: { topTrack: Track }) => {
   return (
-    <div className="bg-gray-900 shadow-lg rounded p-3 z-0 flex flex-col">
+    <div className="bg-gray-900 shadow-lg rounded p-3 z-0 flex flex-col hover:scale-[101%]">
       <div className="group relative">
         <Image
           className="w-full md:w-72 block rounded"
