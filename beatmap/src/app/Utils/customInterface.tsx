@@ -58,6 +58,7 @@ interface Track {
 }
 
 interface TopTracks {
+  error: any;
   items: Track[];
   total: number;
   limit: number;
@@ -76,6 +77,7 @@ interface Follower {
 }
 
 interface SpotifyProfile {
+  error: any;
   display_name: string;
   external_urls: ExternalUrls;
   href: string;

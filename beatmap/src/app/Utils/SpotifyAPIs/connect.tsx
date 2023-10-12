@@ -12,24 +12,14 @@ export async function fetchWebApi(
     });
 
     if (!response.ok) {
-      console.log(
-        `HTTP error! Status: ${response.status}, Status Text: ${response.statusText}`
-      );
-    }
+      const error = response;
 
-    const data = await response.json();
-    if (data.error) {
-      console.log("data :>> ", {
-        url: `https://api.spotify.com/${endpoint}`,
-        res: data,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return null;
+      throw error;
+    } else {
+      const data = await response.json();
+      return data;
     }
-    return data;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error in fetchWebApi:", error);
     console.log({
       "fetchWebApi link:": `https://api.spotify.com/${endpoint}`,
@@ -38,6 +28,6 @@ export async function fetchWebApi(
       },
       method: method,
     });
-    throw error;
+    return { error: { status: error.status, statusText: error.statusText } };
   }
 }

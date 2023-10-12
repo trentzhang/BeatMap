@@ -12,6 +12,14 @@ export default function Body({
 }: {
   currentUser: Pick<MongoDBUserData, "profile" | "topTracks">;
 }) {
+  let currentUserInTestUsers = true;
+  if (
+    currentUser.topTracks?.error &&
+    (currentUser.topTracks.error.status == 403 ||
+      currentUser.profile.error.status == 403)
+  ) {
+    currentUserInTestUsers = false;
+  }
   return (
     <div
       className="flex min-h-screen flex-col 
@@ -29,13 +37,17 @@ export default function Body({
             <Map></Map>
           </motion.div>
 
-          <section>
-            <motion.div className="w-full h-full" id="homepage-my-songs">
-              <TopSongs
-                loggedInUserTopTracks={currentUser.topTracks}
-              ></TopSongs>
-            </motion.div>
-          </section>
+          {currentUserInTestUsers ? (
+            <section>
+              <motion.div className="w-full h-full" id="homepage-my-songs">
+                <TopSongs
+                  loggedInUserTopTracks={currentUser.topTracks}
+                ></TopSongs>
+              </motion.div>
+            </section>
+          ) : (
+            "You're not a test user, contact the developer to be added to the test users."
+          )}
         </section>
       </UserProvider>
       <Footer></Footer>
