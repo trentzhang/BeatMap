@@ -91,11 +91,12 @@ function MyMap() {
             fetchUsersInBounds(map.getBounds()).then((users) => {
               setUsersInBounds(users);
             });
-          }, 800); // Adjust the delay time as needed
+          }, 700); // Adjust the delay time as needed
         }
 
         const actions = {
           move: onMove,
+          zoom: onMove,
           locationfound: onLocationfound,
           locationerror: onLocationerror,
         };
@@ -149,6 +150,12 @@ function MyMap() {
         {currentMaker}
       </>
     );
+  }
+
+  function ClusterClickFlyTo(marker: any) {
+    console.log("marker", marker);
+
+    return null;
   }
 
   const displayMap = useMemo(
