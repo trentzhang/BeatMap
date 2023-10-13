@@ -32,27 +32,43 @@ export default function MusicComponent({
   //   );
   //   const [topTracks, setTopTracks] = useState([]);
 
-  const MyCard = (
-    <Card className="m-5 h-[calc(80vh)] bg-gradient-to-b from-blue-600 to-sky-600">
-      <CardBody>
-        <motion.div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-300  mb-5">
-            Top 50 Songs
-          </h1>
-        </motion.div>
+  const [isToggled, setIsToggled] = useState(false);
+  const controls = useAnimation();
 
-        <ScrollShadow hideScrollBar className="w-full h-full">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
-            {topTracks?.items?.map((topTrack) => (
-              <SpotifyCard topTrack={topTrack} key={topTrack.id}></SpotifyCard>
-            ))}
-          </div>
-        </ScrollShadow>
-      </CardBody>
-    </Card>
+  const handleTap = async () => {
+    setIsToggled(!isToggled);
+
+    // Animate to the desired y position based on the toggle state
+    await controls.start({
+      y: isToggled ? 0 : "-50%",
+    });
+  };
+  const MyCard = (
+    <motion.div animate={controls} onTap={handleTap} className="">
+      <Card className="m-5  bg-gradient-to-b from-blue-600 to-sky-600">
+        <CardBody>
+          <motion.div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-300  mb-5">
+              Top 50 Songs
+            </h1>
+          </motion.div>
+
+          <ScrollShadow hideScrollBar className="h-[60vh]">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
+              {topTracks?.items?.map((topTrack) => (
+                <SpotifyCard
+                  topTrack={topTrack}
+                  key={topTrack.id}
+                ></SpotifyCard>
+              ))}
+            </div>
+          </ScrollShadow>
+        </CardBody>
+      </Card>
+    </motion.div>
   );
   const NothingHereCard = (
-    <div className="h-[calc(80vh)]">
+    <div>
       <Card className="m-5 bg-gradient-to-b from-blue-600 to-sky-600">
         <CardBody>
           <h1 className="text-sm sm:text-md md:text-lg font-bold text-gray-300  mb-5">
@@ -70,18 +86,6 @@ export default function MusicComponent({
     </div>
   );
 
-  const [isToggled, setIsToggled] = useState(false);
-  const controls = useAnimation();
-
-  const handleTap = async () => {
-    setIsToggled(!isToggled);
-
-    // Animate to the desired y position based on the toggle state
-    await controls.start({
-      y: isToggled ? 0 : "-35vh",
-    });
-  };
-
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -90,13 +94,15 @@ export default function MusicComponent({
         exit={{ x: "100vw" }}
         key={selectedUser?._id}
       >
-        <motion.div animate={controls} onTap={handleTap}>
+        {topTracks ? (
           <currentlyPlayingContext.Provider
             value={{ currentlyPlaying, setCurrentlyPlaying }}
           >
-            {topTracks ? MyCard : NothingHereCard}
+            {MyCard}
           </currentlyPlayingContext.Provider>
-        </motion.div>
+        ) : (
+          NothingHereCard
+        )}
       </motion.div>
     </AnimatePresence>
   );

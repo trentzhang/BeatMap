@@ -38,7 +38,7 @@ export default function Body({
         </motion.div>
 
         {currentUserInTestUsers ? (
-          <section className="fixed top-[45vh]  md:top-[55vh]">
+          <section className="fixed  top-[45vh]  md:top-[55vh]">
             <motion.div id="homepage-my-songs">
               <TopSongs
                 loggedInUserTopTracks={currentUser.topTracks}
