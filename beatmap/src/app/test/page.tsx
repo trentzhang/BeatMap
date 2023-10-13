@@ -5,10 +5,6 @@ import { motion } from "framer-motion";
 const App = () => {
   const [isTapped, setIsTapped] = useState(false);
 
-  const onPointerDownCapture = (e) => {
-    e.stopPropagation();
-  };
-
   const onTap = () => {
     setIsTapped(true);
   };
