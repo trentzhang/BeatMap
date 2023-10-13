@@ -35,8 +35,6 @@ export default async function Home({
           getTopTracks(spotifyToken),
           getProfile(spotifyToken),
         ]);
-        console.log("topTracks", topTracks);
-        console.log("profile", profile);
         if (authorizationInfo && !topTracks.error && !profile.error) {
           post2MongoDB(authorizationInfo, topTracks, profile, location);
         } else {
@@ -50,7 +48,6 @@ export default async function Home({
       console.log("error :>> ", error);
     }
   }
-  //   console.log("topTracks :>> ", topTracks.items[0]);
 
   return (
     <main>

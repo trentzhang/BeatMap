@@ -8,7 +8,6 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     let id = searchParams.get("id");
-    // console.log("id", id);
     if (id) {
       await client.connect();
       const db = client.db("BeatMap");
@@ -25,7 +24,6 @@ export async function GET(request: NextRequest) {
       });
     }
   } catch (error) {
-    // console.log("error", error);
     return new Response("Error!", {
       status: 500,
     });

@@ -59,7 +59,10 @@ export async function post2MongoDB(
     await collection.updateOne(filter, data, {
       upsert: true,
     });
-    console.log(profile.display_name, "Successfully updated data to MongoDB");
+    console.log(
+      profile.display_name,
+      `Successfully updated ${Object.keys(data.$set)} data to MongoDB`
+    );
   } catch (error) {
     console.log("error :>> ", error);
   } finally {

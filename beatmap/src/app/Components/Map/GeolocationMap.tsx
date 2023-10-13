@@ -28,7 +28,6 @@ const fetchUsersInBounds = async (bounds: any) => {
     if (response.ok) {
       const users = await response.json();
       // Do something with the users
-      console.log("Users in bounds:", users);
       return users;
     } else {
       console.error("Error fetching users:", response.status);
