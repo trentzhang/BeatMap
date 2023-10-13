@@ -73,42 +73,33 @@ export default function MusicComponent({
     </motion.div>
   );
   const NothingHereCard = (
-    <div>
-      <Card className="m-5 bg-gradient-to-b from-blue-600 to-sky-600">
-        <CardBody>
-          <h1 className="text-sm sm:text-md md:text-lg font-bold text-gray-300  mb-5">
-            Connect to Spotify to upload your music
-          </h1>
-        </CardBody>
-      </Card>
-      <Card className="m-5 bg-gradient-to-b from-blue-600 to-sky-600">
-        <CardBody>
-          <h1 className="text-sm sm:text-md md:text-lg font-bold text-gray-300  mb-5">
-            Select a user to see their top tracks
-          </h1>
-        </CardBody>
-      </Card>
+    <div className="mt-[10vh] h-[15vh] p-10  flex flex-col items-center justify-between ">
+      <h1 className="text-sm sm:text-md md:text-lg font-bold text-gray-300  ">
+        Select a user to see their top tracks
+      </h1>
     </div>
   );
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        initial={{ x: "100vw" }}
-        animate={{ x: 0 }}
-        exit={{ x: "100vw" }}
-        key={selectedUser?._id}
-      >
+    <>
+      <AnimatePresence mode="wait">
         {topTracks ? (
-          <currentlyPlayingContext.Provider
-            value={{ currentlyPlaying, setCurrentlyPlaying }}
+          <motion.div
+            initial={{ x: "100vw" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100vw" }}
+            key={selectedUser?._id}
           >
-            {MyCard}
-          </currentlyPlayingContext.Provider>
+            <currentlyPlayingContext.Provider
+              value={{ currentlyPlaying, setCurrentlyPlaying }}
+            >
+              {MyCard}
+            </currentlyPlayingContext.Provider>{" "}
+          </motion.div>
         ) : (
           NothingHereCard
-        )}
-      </motion.div>
-    </AnimatePresence>
+        )}{" "}
+      </AnimatePresence>
+    </>
   );
 }
