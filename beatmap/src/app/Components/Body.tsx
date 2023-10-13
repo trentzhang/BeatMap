@@ -34,7 +34,7 @@ export default function Body({
           className="relative h-[40vh] md:h-[50vh] w-full flex items-center justify-center"
           id="homepage-map"
         >
-          <Map></Map>
+          <Map currentUser={currentUser}></Map>
         </motion.div>
 
         {currentUserInTestUsers ? (

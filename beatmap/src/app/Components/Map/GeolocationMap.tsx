@@ -38,7 +38,11 @@ const fetchUsersInBounds = async (bounds: any) => {
   }
 };
 
-function MyMap() {
+function MyMap({
+  currentUser,
+}: {
+  currentUser: Pick<MongoDBUserData, "profile" | "topTracks">;
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -72,6 +76,20 @@ function MyMap() {
           onMove();
           pushLocation(e.latlng);
           // send current location to database if logged in
+          const data = {
+            profile: currentUser?.profile,
+            location: {
+              type: "Point",
+              coordinates: [e.latlng.lng, e.latlng.lat],
+            },
+          };
+          if (currentUser?.profile) {
+            fetch("/api/post/realtime-location", {
+              body: JSON.stringify(data),
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+            });
+          }
 
           // fly to current location
           setPosition(e.latlng);
