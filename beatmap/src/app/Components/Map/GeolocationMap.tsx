@@ -75,7 +75,7 @@ function MyMap() {
 
           // fly to current location
           setPosition(e.latlng);
-          map.flyTo(e.latlng, 13);
+          //   map.flyTo(e.latlng, 13); fly to current location with 13 zoom
         }
         function onLocationerror(e: any) {
           onMove();
@@ -150,12 +150,6 @@ function MyMap() {
         {currentMaker}
       </>
     );
-  }
-
-  function ClusterClickFlyTo(marker: any) {
-    console.log("marker", marker);
-
-    return null;
   }
 
   const displayMap = useMemo(
