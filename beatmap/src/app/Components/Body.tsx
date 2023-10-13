@@ -22,7 +22,7 @@ export default function Body({
   }
   return (
     <div
-      className="flex h-screen flex-col 
+      className="flex body-h flex-col 
         items-center justify-normal   
         bg-gradient-to-t from-slate-600 via-slate-300  background-animate 
         no-scrollbar "
@@ -38,7 +38,7 @@ export default function Body({
         </motion.div>
 
         {currentUserInTestUsers ? (
-          <section className="fixed top-[40vh]  md:top-[50vh]">
+          <section className="fixed top-[45vh]  md:top-[55vh]">
             <motion.div id="homepage-my-songs">
               <TopSongs
                 loggedInUserTopTracks={currentUser.topTracks}

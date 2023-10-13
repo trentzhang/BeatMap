@@ -22,3 +22,13 @@
 .mask-image-my {
   mask-image: radial-gradient(black 30%, transparent 70%);
 }
+
+.body-h {
+  height: calc(100vh);
+}
+
+@supports (height: 100svh) {
+  .body-h {
+    height: calc(100svh);
+  }
+}
