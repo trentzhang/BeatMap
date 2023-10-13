@@ -42,20 +42,6 @@ function MyMap({
 }: {
   currentUser: Pick<MongoDBUserData, "profile" | "topTracks">;
 }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  function pushLocation(coords: L.LatLng) {
-    // push location to current url
-    const current = new URLSearchParams(searchParams);
-    current.set("latitude", String(coords.lat));
-    current.set("longitude", String(coords.lng));
-    const search = current.toString();
-    const query = search ? `?${search}` : "";
-    router.push(`${pathname}${query}`);
-  }
-
   const { selectedUser, setSelectedUser } = useUserContext();
 
   function LocationMarkers() {
