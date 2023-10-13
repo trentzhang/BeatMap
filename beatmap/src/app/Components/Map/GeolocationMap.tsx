@@ -74,7 +74,7 @@ function MyMap({
       if (map) {
         function onLocationfound(e: any) {
           onMove();
-          pushLocation(e.latlng);
+          //   pushLocation(e.latlng);
           // send current location to database if logged in
           const data = {
             profile: currentUser?.profile,
