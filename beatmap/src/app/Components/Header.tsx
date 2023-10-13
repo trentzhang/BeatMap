@@ -34,17 +34,17 @@ export const Header = ({ currentUser = "" }) => {
           <a href="/"> BeatMap</a>
         </p>
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem isActive>
+      <NavbarContent className=" sm:flex gap-4" justify="center">
+        {/* <NavbarItem isActive>
           <Link color="foreground" href="#homepage-map">
             Map
           </Link>
-        </NavbarItem>
-        <NavbarItem>
+        </NavbarItem> */}
+        {/* <NavbarItem>
           <Link color="foreground" href="#homepage-my-songs">
             Top Songs
           </Link>
-        </NavbarItem>
+        </NavbarItem> */}
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>

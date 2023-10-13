@@ -22,33 +22,33 @@ export default function Body({
   }
   return (
     <div
-      className="flex min-h-screen flex-col 
+      className="flex h-screen flex-col 
         items-center justify-normal   
         bg-gradient-to-t from-slate-600 via-slate-300  background-animate 
         no-scrollbar "
     >
       <Header currentUser={currentUser.profile?.display_name}></Header>
       <UserProvider>
-        <section className="mb-auto h-full w-full flex flex-col items-center justify-center">
-          <motion.div
-            className="relative h-[40vh] md:h-[50vh] w-full flex items-center justify-center"
-            id="homepage-map"
-          >
-            <Map></Map>
-          </motion.div>
+        {/* <section className="mb-auto h-full w-full flex flex-col items-center justify-center"> */}
+        <motion.div
+          className="relative h-[40vh] md:h-[50vh] w-full flex items-center justify-center"
+          id="homepage-map"
+        >
+          <Map></Map>
+        </motion.div>
 
-          {currentUserInTestUsers ? (
-            <section>
-              <motion.div className="w-full h-full" id="homepage-my-songs">
-                <TopSongs
-                  loggedInUserTopTracks={currentUser.topTracks}
-                ></TopSongs>
-              </motion.div>
-            </section>
-          ) : (
-            "You're not a test user, contact the developer to be added to the test users."
-          )}
-        </section>
+        {currentUserInTestUsers ? (
+          <section className="fixed top-[40vh]  md:top-[50vh]">
+            <motion.div id="homepage-my-songs">
+              <TopSongs
+                loggedInUserTopTracks={currentUser.topTracks}
+              ></TopSongs>
+            </motion.div>
+          </section>
+        ) : (
+          "You're not a test user, contact the developer to be added to the test users."
+        )}
+        {/* </section> */}
       </UserProvider>
       <Footer></Footer>
     </div>
