@@ -33,6 +33,7 @@ export default function MusicComponent({
   //   const [topTracks, setTopTracks] = useState([]);
 
   const [isToggled, setIsToggled] = useState(false);
+
   const controls = useAnimation();
 
   const handleTap = async () => {
@@ -53,7 +54,11 @@ export default function MusicComponent({
             </h1>
           </motion.div>
 
-          <ScrollShadow hideScrollBar className="h-[60vh]">
+          <ScrollShadow
+            hideScrollBar
+            className="h-[60vh]"
+            onPointerDownCapture={(e) => e.stopPropagation()}
+          >
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
               {topTracks?.items?.map((topTrack) => (
                 <SpotifyCard

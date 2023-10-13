@@ -1,32 +1,40 @@
 "use client";
-import { motion, useAnimation } from "framer-motion";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
-const Card = () => {
-  const [isCardOpen, setIsCardOpen] = useState(false);
-  const controls = useAnimation();
+const App = () => {
+  const [isTapped, setIsTapped] = useState(false);
 
-
-  const handleCardHeaderTap = () => {
-    setIsCardOpen(!isCardOpen);
-
-    controls.start({
-      y: isCardOpen ? 0 :50,
-    });
+  const onPointerDownCapture = (e) => {
+    e.stopPropagation();
   };
 
+  const onTap = () => {
+    setIsTapped(true);
+  };
+
+  useEffect(() => {
+    setTimeout(() => setIsTapped(false), 1000);
+  }, [isTapped]);
+
   return (
-    <motion.div className="card" animate={controls}>
-      <motion.div className="card-header" onTap={handleCardHeaderTap}>
-        {/* Your card header content */}
-        Tap me to open/close!
+    <div className="flex items-center justify-center h-screen">
+      <motion.div
+        className=" h-20 w-20 bg-red-500 flex items-center justify-center"
+        initial={{ scale: 1 }}
+        whileTap={{ scale: 2 }}
+        onTap={onTap}
+      >
+        <div>
+          {isTapped && (
+            <text onPointerDownCapture={(e) => e.stopPropagation()}>
+              Tapped!
+            </text>
+          )}
+        </div>
       </motion.div>
-      <motion.div className="card-content">
-        {/* Your card content */}
-        This is the card content.
-      </motion.div>
-    </motion.div>
+    </div>
   );
 };
 
-export default Card;
+export default App;
