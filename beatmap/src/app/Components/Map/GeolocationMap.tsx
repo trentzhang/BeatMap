@@ -35,6 +35,7 @@ const fetchUsersInBounds = async (bounds: any) => {
   } catch (error) {
     console.error("Error fetching users:", error);
   }
+  return null;
 };
 
 function MyMap({
@@ -155,6 +156,21 @@ function MyMap({
     );
   }
 
+  function DbClickZoom2World() {
+    const map = useMap();
+
+    useEffect(() => {
+      function onDbClick(e: any) {
+        map.flyTo(map.getCenter(), 3);
+      }
+      map.on("dblclick", onDbClick);
+      return () => {
+        map.off("dblclick", onDbClick);
+      };
+    }, [map]);
+    return null;
+  }
+
   const displayMap = useMemo(
     () => (
       <MapContainer
@@ -170,6 +186,7 @@ function MyMap({
           maxZoom={13}
           minZoom={2}
         />
+        <DbClickZoom2World />
         <MarkerClusterGroup chunkedLoading animateAddingMarkers={true}>
           <LocationMarkers />
         </MarkerClusterGroup>
