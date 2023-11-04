@@ -75,7 +75,7 @@ export default function MusicComponent({
   const NothingHereCard = (
     <div className="mt-[10vh] h-[15vh] p-10  flex flex-col items-center justify-between ">
       <h1 className="text-sm sm:text-md md:text-lg font-bold text-gray-300  ">
-        Select a user to see their top tracks
+        Drag the map and select a user to see their top tracks!
       </h1>
     </div>
   );
