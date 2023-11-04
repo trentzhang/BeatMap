@@ -18,6 +18,8 @@ export async function GET(request: NextRequest) {
           $box: [southwest, northeast],
         },
       },
+
+      topTracks: { $exists: true },
     };
     const select = { _id: 1, location: 1 };
 
