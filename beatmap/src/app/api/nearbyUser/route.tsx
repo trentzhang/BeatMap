@@ -20,6 +20,7 @@ export async function GET(request: NextRequest) {
           $box: [southwest, northeast],
         },
       },
+      topTracks: { $exists: true },
     };
     const select = { authorizationInfo: 0 };
     users = await collection.find(query).project(select).limit(10).toArray();
